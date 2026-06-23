@@ -1,9 +1,10 @@
 import { useState } from "react";
 import type { Cliente, GestionCobro, GestionEstado, LogEntry, MessageTemplate } from "../types";
-import { GESTION_ESTADO_LABEL, facturaId } from "../types";
+import { GESTION_ESTADO_LABEL, facturaId, plazoDias, vencimientoEstimado } from "../types";
 import type { Factura } from "../types";
 import { formatCLP, formatRUT } from "../utils/formatters";
 import { MessagePreviewModal } from "./MessagePreviewModal";
+import { ConfirmarPagoModal } from "./ConfirmarPagoModal";
 
 interface FacturaDetalleProps {
   factura: Factura;
@@ -46,17 +47,60 @@ export function FacturaDetalle({
 }: FacturaDetalleProps) {
   const [notas, setNotas] = useState(gestion?.notas ?? "");
   const [previewTemplate, setPreviewTemplate] = useState<MessageTemplate | null>(null);
+  const [mostrarConfirmarPago, setMostrarConfirmarPago] = useState(false);
+  const [plazoInput, setPlazoInput] = useState(plazoDias(factura, gestion));
   const id = facturaId(factura);
 
   const handleEstadoChange = (estado: GestionEstado) => {
-    const fechaPago = estado === "pagado" ? (gestion?.fechaPago ?? new Date().toISOString().slice(0, 10)) : gestion?.fechaPago;
-    onUpdateGestion({ facturaId: id, estado, notas, fechaPago });
+    if (estado === "pagado" && !gestion?.fechaPago) {
+      setMostrarConfirmarPago(true);
+      return;
+    }
+    onUpdateGestion({ ...gestion, facturaId: id, estado, notas });
     onAddLog({
       id: crypto.randomUUID(),
       facturaId: id,
       timestamp: new Date().toISOString(),
       actor,
       accion: `Cambió estado de gestión a "${GESTION_ESTADO_LABEL[estado]}"`,
+    });
+  };
+
+  const handleConfirmarPago = (data: {
+    comprobante?: string;
+    comprobanteNombre?: string;
+    numeroTransaccion?: string;
+    fechaPago: string;
+  }) => {
+    onUpdateGestion({
+      ...gestion,
+      facturaId: id,
+      estado: "pagado",
+      notas,
+      ...data,
+    });
+    const validacion = data.comprobante
+      ? `comprobante "${data.comprobanteNombre}"`
+      : `número de transacción "${data.numeroTransaccion}"`;
+    onAddLog({
+      id: crypto.randomUUID(),
+      facturaId: id,
+      timestamp: new Date().toISOString(),
+      actor,
+      accion: `Marcó como pagado (validado con ${validacion}, fecha de pago ${data.fechaPago})`,
+    });
+    setMostrarConfirmarPago(false);
+  };
+
+  const handlePlazoBlur = () => {
+    if (plazoInput === plazoDias(factura, gestion)) return;
+    onUpdateGestion({ ...gestion, facturaId: id, estado: gestion?.estado ?? "sin_contactar", notas, plazoDiasPago: plazoInput });
+    onAddLog({
+      id: crypto.randomUUID(),
+      facturaId: id,
+      timestamp: new Date().toISOString(),
+      actor,
+      accion: `Actualizó plazo de pago a ${plazoInput} días`,
     });
   };
 
@@ -188,6 +232,70 @@ export function FacturaDetalle({
         )}
 
         <div className="mb-4 rounded border border-gray-200 p-3">
+          <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Plazo y vencimiento</h3>
+          {(() => {
+            const venc = vencimientoEstimado(factura, gestion);
+            const hoy = new Date();
+            const fechaEmision = new Date(factura.fechaEmision);
+            const fechaReferencia = gestion?.fechaPago ? new Date(gestion.fechaPago) : hoy;
+            const diasTranscurridos = Math.max(
+              0,
+              Math.round((fechaReferencia.getTime() - fechaEmision.getTime()) / (1000 * 60 * 60 * 24)),
+            );
+            const diasHastaVencimiento = Math.round(
+              (new Date(venc).getTime() - fechaReferencia.getTime()) / (1000 * 60 * 60 * 24),
+            );
+            const esCesionAutoritativa = !!factura.cesion?.vencimiento;
+            return (
+              <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                <div>
+                  <p className="text-xs text-gray-400">Forma de pago</p>
+                  <p className="font-medium">{factura.formaPago}</p>
+                </div>
+                <div>
+                  <label className="text-xs text-gray-400">Plazo (días)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={plazoInput}
+                    onChange={(e) => setPlazoInput(Number(e.target.value))}
+                    onBlur={handlePlazoBlur}
+                    disabled={readOnly || esCesionAutoritativa}
+                    className="w-full rounded border border-gray-300 px-2 py-1 text-sm disabled:bg-gray-100"
+                  />
+                  {esCesionAutoritativa && <p className="text-xs text-gray-400">Definido por cesión</p>}
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400">Vencimiento {esCesionAutoritativa ? "(cesión)" : "estimado"}</p>
+                  <p className="font-medium">{venc}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-400">
+                    {gestion?.fechaPago ? "Días hasta el pago" : "Días transcurridos"}
+                  </p>
+                  <p className="font-medium">{diasTranscurridos}</p>
+                </div>
+                <div className="col-span-2 sm:col-span-4">
+                  {gestion?.fechaPago ? (
+                    <p className={`text-sm ${diasHastaVencimiento < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {diasHastaVencimiento < 0
+                        ? `Se pagó ${Math.abs(diasHastaVencimiento)} días después del vencimiento.`
+                        : `Se pagó ${diasHastaVencimiento} días antes del vencimiento.`}
+                    </p>
+                  ) : (
+                    <p className={`text-sm ${diasHastaVencimiento < 0 ? "text-red-600" : "text-gray-600"}`}>
+                      {diasHastaVencimiento < 0
+                        ? `Vencida hace ${Math.abs(diasHastaVencimiento)} días.`
+                        : `Vence en ${diasHastaVencimiento} días.`}
+                    </p>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+
+        <div className="mb-4 rounded border border-gray-200 p-3">
           <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Gestión de cobro</h3>
 
           <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Estado</label>
@@ -213,6 +321,18 @@ export function FacturaDetalle({
             rows={3}
             className="mb-3 w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100"
           />
+
+          {gestion?.estado === "pagado" && (gestion.comprobante || gestion.numeroTransaccion) && (
+            <div className="mb-3 rounded border border-green-200 bg-green-50 p-2 text-xs text-green-800">
+              <p className="font-medium">Pago validado</p>
+              {gestion.numeroTransaccion && <p>N° transacción: {gestion.numeroTransaccion}</p>}
+              {gestion.comprobante && (
+                <a href={gestion.comprobante} download={gestion.comprobanteNombre} className="text-blue-700 hover:underline">
+                  Ver comprobante ({gestion.comprobanteNombre})
+                </a>
+              )}
+            </div>
+          )}
 
           {!cliente?.email && !cliente?.whatsapp && (
             <p className="mb-2 text-xs text-amber-600">
@@ -266,6 +386,10 @@ export function FacturaDetalle({
           onClose={() => setPreviewTemplate(null)}
           onSend={() => handleEnviar(previewTemplate)}
         />
+      )}
+
+      {mostrarConfirmarPago && (
+        <ConfirmarPagoModal onClose={() => setMostrarConfirmarPago(false)} onConfirm={handleConfirmarPago} />
       )}
     </div>
   );

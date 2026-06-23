@@ -10,8 +10,9 @@ import { ClientesView } from "./components/ClientesView";
 import { Configuracion } from "./components/Configuracion";
 import { Login } from "./components/Login";
 import { MessagePreviewModal } from "./components/MessagePreviewModal";
+import { Calendario } from "./components/Calendario";
 
-type Vista = "facturas" | "dashboard" | "clientes" | "configuracion";
+type Vista = "facturas" | "dashboard" | "clientes" | "calendario" | "configuracion";
 
 // Datos de contacto de prueba para autocompletar clientes nuevos en este prototipo sin backend.
 const CONTACTO_PRUEBA = {
@@ -103,6 +104,7 @@ function App() {
     { id: "facturas", label: "Facturas" },
     { id: "dashboard", label: "Dashboard" },
     { id: "clientes", label: "Clientes" },
+    { id: "calendario", label: "Calendario" },
     { id: "configuracion", label: "Configuración" },
   ];
 
@@ -170,6 +172,10 @@ function App() {
           gestiones={gestiones}
           onVerFactura={setSeleccionada}
         />
+      )}
+
+      {vista === "calendario" && (
+        <Calendario facturas={facturas} gestiones={gestiones} onVerFactura={setSeleccionada} />
       )}
 
       {vista === "configuracion" &&

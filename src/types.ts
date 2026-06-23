@@ -119,6 +119,27 @@ export interface GestionCobro {
   estado: GestionEstado;
   notas: string;
   fechaPago?: string;
+  plazoDiasPago?: number;
+  comprobante?: string;
+  comprobanteNombre?: string;
+  numeroTransaccion?: string;
+}
+
+export const PLAZO_DEFAULT_DIAS: Record<Factura["formaPago"], number> = {
+  Contado: 0,
+  Crédito: 30,
+};
+
+export function plazoDias(factura: Factura, gestion: GestionCobro | undefined): number {
+  return gestion?.plazoDiasPago ?? PLAZO_DEFAULT_DIAS[factura.formaPago];
+}
+
+export function vencimientoEstimado(factura: Factura, gestion: GestionCobro | undefined): string {
+  if (factura.cesion?.vencimiento) return factura.cesion.vencimiento;
+  const dias = plazoDias(factura, gestion);
+  const fecha = new Date(factura.fechaEmision);
+  fecha.setDate(fecha.getDate() + dias);
+  return fecha.toISOString().slice(0, 10);
 }
 
 export interface LogEntry {
