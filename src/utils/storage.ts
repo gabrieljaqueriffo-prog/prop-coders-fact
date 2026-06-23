@@ -35,7 +35,7 @@ export const storage = {
   loadFacturas: (): Factura[] => load(KEYS.facturas, []),
   saveFacturas: (v: Factura[]) => save(KEYS.facturas, v),
 
-  loadClientes: (): Cliente[] => load(KEYS.clientes, []),
+  loadClientes: (): Cliente[] => load(KEYS.clientes, DEFAULT_CLIENTES),
   saveClientes: (v: Cliente[]) => save(KEYS.clientes, v),
 
   loadGestiones: (): GestionCobro[] => load(KEYS.gestiones, []),
@@ -57,6 +57,21 @@ export const storage = {
     Object.values(KEYS).forEach((k) => localStorage.removeItem(k));
   },
 };
+
+export const DEFAULT_CLIENTES: Cliente[] = [
+  {
+    rut: "76146382-9",
+    nombre: "GEORADAR CHILE",
+    email: "ajaque@georadarchile.cl",
+    whatsapp: "+56999913532",
+    notas:
+      "Razón social: INGENIERIA AGUSTIN OMAR JAQUE LAFUENTE EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA. " +
+      "Giro: 421000 - Construcción de carreteras y líneas de ferrocarril. " +
+      "Dirección: Arq. Gabriel Ovalle 4348, Ñuñoa, Chile. " +
+      "Propósito de la relación con Chita: Financiamiento. " +
+      "Beneficiario final: Agustín Omar Jaque Lafuente, cédula 5008757-3, nacionalidad Chile.",
+  },
+];
 
 export const DEFAULT_TEMPLATES: MessageTemplate[] = [
   {
