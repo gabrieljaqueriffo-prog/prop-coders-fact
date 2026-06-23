@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<EnvioDTE xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+<SetDTE ID="SDTE105">
+  <Caratula version="1.0">
+    <RutEmisor>76146382-9</RutEmisor>
+    <RutReceptor>77611649-1</RutReceptor>
+    <FchResol>2014-10-21</FchResol>
+    <NroResol>99</NroResol>
+    <TmstFirmaEnv>2026-06-22T10:00:00</TmstFirmaEnv>
+  </Caratula>
+<DTE version="1.0">
+<Documento ID="MiPE105">
+    <Encabezado>
+      <IdDoc>
+        <TipoDTE>33</TipoDTE>
+        <Folio>105</Folio>
+        <FchEmis>2026-06-22</FchEmis>
+        <FmaPago>2</FmaPago>
+      </IdDoc>
+      <Emisor>
+        <RUTEmisor>76146382-9</RUTEmisor>
+        <RznSoc>INGENIERIA GEORADAR CHILE SPA</RznSoc>
+        <GiroEmis>SERVICIOS DE INGENIERIA Y PROSPECCION</GiroEmis>
+        <CorreoEmisor>contacto@georadarchile.cl</CorreoEmisor>
+        <DirOrigen>ARQ. GABRIEL OVALLE 4348</DirOrigen>
+        <CmnaOrigen>NUNOA</CmnaOrigen>
+        <CiudadOrigen>SANTIAGO</CiudadOrigen>
+      </Emisor>
+      <Receptor>
+        <RUTRecep>77611649-1</RUTRecep>
+        <RznSocRecep>SOCIEDAD TRANSMISORA METROPOLITANA S.A.</RznSocRecep>
+        <GiroRecep>TRANSMISION DE ENERGIA ELECTRICA</GiroRecep>
+        <DirRecep>BULNES 441</DirRecep>
+        <CmnaRecep>OSORNO</CmnaRecep>
+        <CiudadRecep>OSORNO</CiudadRecep>
+      </Receptor>
+      <Totales>
+        <MntNeto>5200000</MntNeto>
+        <TasaIVA>19.00</TasaIVA>
+        <IVA>988000</IVA>
+        <MntTotal>6188000</MntTotal>
+      </Totales>
+    </Encabezado>
+    <Detalle>
+      <NroLinDet>1</NroLinDet>
+      <NmbItem>Inspección de líneas de transmisión</NmbItem>
+      <DscItem>Inspección con drone y georradar</DscItem>
+      <QtyItem>1.00</QtyItem>
+      <UnmdItem>gl</UnmdItem>
+      <PrcItem>5200000.00</PrcItem>
+      <MontoItem>5200000</MontoItem>
+    </Detalle>
+    <Referencia>
+      <NroLinRef>1</NroLinRef>
+      <TpoDocRef>HES</TpoDocRef>
+      <FolioRef>1000000105</FolioRef>
+      <FchRef>2026-06-22</FchRef>
+    </Referencia>
+    <TmstFirma>2026-06-22T10:00:00</TmstFirma>
+  </Documento>
+</DTE></SetDTE>
+</EnvioDTE>

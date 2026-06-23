@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<EnvioDTE xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+<SetDTE ID="SDTE101">
+  <Caratula version="1.0">
+    <RutEmisor>76146382-9</RutEmisor>
+    <RutReceptor>76616492-7</RutReceptor>
+    <FchResol>2014-10-21</FchResol>
+    <NroResol>99</NroResol>
+    <TmstFirmaEnv>2026-06-20T10:00:00</TmstFirmaEnv>
+  </Caratula>
+<DTE version="1.0">
+<Documento ID="MiPE101">
+    <Encabezado>
+      <IdDoc>
+        <TipoDTE>33</TipoDTE>
+        <Folio>101</Folio>
+        <FchEmis>2026-06-20</FchEmis>
+        <FmaPago>2</FmaPago>
+      </IdDoc>
+      <Emisor>
+        <RUTEmisor>76146382-9</RUTEmisor>
+        <RznSoc>INGENIERIA GEORADAR CHILE SPA</RznSoc>
+        <GiroEmis>SERVICIOS DE INGENIERIA Y PROSPECCION</GiroEmis>
+        <CorreoEmisor>contacto@georadarchile.cl</CorreoEmisor>
+        <DirOrigen>ARQ. GABRIEL OVALLE 4348</DirOrigen>
+        <CmnaOrigen>NUNOA</CmnaOrigen>
+        <CiudadOrigen>SANTIAGO</CiudadOrigen>
+      </Emisor>
+      <Receptor>
+        <RUTRecep>76616492-7</RUTRecep>
+        <RznSocRecep>SERVICIOS DE INGENIERIA DSP LIMITADA</RznSocRecep>
+        <GiroRecep>CONSTRUCCION DE OBRAS DE INGENIERIA</GiroRecep>
+        <DirRecep>GENERAL DEL CANTO 10</DirRecep>
+        <CmnaRecep>PROVIDENCIA</CmnaRecep>
+        <CiudadRecep>SANTIAGO</CiudadRecep>
+      </Receptor>
+      <Totales>
+        <MntNeto>2500000</MntNeto>
+        <TasaIVA>19.00</TasaIVA>
+        <IVA>475000</IVA>
+        <MntTotal>2975000</MntTotal>
+      </Totales>
+    </Encabezado>
+    <Detalle>
+      <NroLinDet>1</NroLinDet>
+      <NmbItem>Estudio de subsuelo</NmbItem>
+      <DscItem>Etapa 1 de 3, sector poniente</DscItem>
+      <QtyItem>1.00</QtyItem>
+      <UnmdItem>gl</UnmdItem>
+      <PrcItem>1800000.00</PrcItem>
+      <MontoItem>1800000</MontoItem>
+    </Detalle>
+    <Detalle>
+      <NroLinDet>2</NroLinDet>
+      <NmbItem>Informe técnico</NmbItem>
+      <DscItem>Informe final con resultados georradar</DscItem>
+      <QtyItem>2.00</QtyItem>
+      <UnmdItem>un</UnmdItem>
+      <PrcItem>350000.00</PrcItem>
+      <MontoItem>700000</MontoItem>
+    </Detalle>
+    <Referencia>
+      <NroLinRef>1</NroLinRef>
+      <TpoDocRef>HES</TpoDocRef>
+      <FolioRef>1000000101</FolioRef>
+      <FchRef>2026-06-20</FchRef>
+    </Referencia>
+    <TmstFirma>2026-06-20T10:00:00</TmstFirma>
+  </Documento>
+</DTE></SetDTE>
+</EnvioDTE>

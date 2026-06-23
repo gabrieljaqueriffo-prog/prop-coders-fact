@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<AEC xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+<DocumentoAEC ID="DAEC102">
+  <Caratula version="1.0">
+    <RutCedente>76146382-9</RutCedente>
+    <RutCesionario>97004000-5</RutCesionario>
+    <TmstFirmaEnvio>2026-06-08T12:00:00</TmstFirmaEnvio>
+  </Caratula>
+  <Cesiones>
+<DTECedido version="1.0">
+  <DocumentoDTECedido ID="MiPEDTE102">
+
+
+  
+<DTE version="1.0">
+<Documento ID="MiPE102">
+    <Encabezado>
+      <IdDoc>
+        <TipoDTE>33</TipoDTE>
+        <Folio>102</Folio>
+        <FchEmis>2026-06-08</FchEmis>
+        <FmaPago>2</FmaPago>
+      </IdDoc>
+      <Emisor>
+        <RUTEmisor>76146382-9</RUTEmisor>
+        <RznSoc>INGENIERIA GEORADAR CHILE SPA</RznSoc>
+        <GiroEmis>SERVICIOS DE INGENIERIA Y PROSPECCION</GiroEmis>
+        <CorreoEmisor>contacto@georadarchile.cl</CorreoEmisor>
+        <DirOrigen>ARQ. GABRIEL OVALLE 4348</DirOrigen>
+        <CmnaOrigen>NUNOA</CmnaOrigen>
+        <CiudadOrigen>SANTIAGO</CiudadOrigen>
+      </Emisor>
+      <Receptor>
+        <RUTRecep>77611649-1</RUTRecep>
+        <RznSocRecep>SOCIEDAD TRANSMISORA METROPOLITANA S.A.</RznSocRecep>
+        <GiroRecep>TRANSMISION DE ENERGIA ELECTRICA</GiroRecep>
+        <DirRecep>BULNES 441</DirRecep>
+        <CmnaRecep>OSORNO</CmnaRecep>
+        <CiudadRecep>OSORNO</CiudadRecep>
+      </Receptor>
+      <Totales>
+        <MntNeto>1578418</MntNeto>
+        <TasaIVA>19.00</TasaIVA>
+        <IVA>299899</IVA>
+        <MntTotal>1878317</MntTotal>
+      </Totales>
+    </Encabezado>
+    <Detalle>
+      <NroLinDet>1</NroLinDet>
+      <NmbItem>Informe Final GeoRadar</NmbItem>
+      <DscItem>Servicios geo radar sector transmisión eléctrica</DscItem>
+      <QtyItem>1.00</QtyItem>
+      <UnmdItem>gl</UnmdItem>
+      <PrcItem>1578418.00</PrcItem>
+      <MontoItem>1578418</MontoItem>
+    </Detalle>
+    <Referencia>
+      <NroLinRef>1</NroLinRef>
+      <TpoDocRef>HES</TpoDocRef>
+      <FolioRef>1000000102</FolioRef>
+      <FchRef>2026-06-08</FchRef>
+    </Referencia>
+    <TmstFirma>2026-06-08T10:00:00</TmstFirma>
+  </Documento>
+</DTE>
+
+
+    <TmstFirma>2026-06-08T12:00:00</TmstFirma>
+  </DocumentoDTECedido>
+</DTECedido>
+<Cesion version="1.0">
+  <DocumentoCesion ID="MiPECSN102">
+    <SeqCesion>1</SeqCesion>
+    <IdDTE>
+      <TipoDTE>33</TipoDTE>
+      <RUTEmisor>76146382-9</RUTEmisor>
+      <RUTReceptor>77611649-1</RUTReceptor>
+      <Folio>102</Folio>
+      <FchEmis>2026-06-08</FchEmis>
+      <MntTotal>1878317</MntTotal>
+    </IdDTE>
+    <Cedente>
+      <RUT>76146382-9</RUT>
+      <RazonSocial>INGENIERIA GEORADAR CHILE SPA</RazonSocial>
+      <Direccion>ARQ. GABRIEL OVALLE 4348</Direccion>
+      <eMail>contacto@georadarchile.cl</eMail>
+    </Cedente>
+    <Cesionario>
+      <RUT>97004000-5</RUT>
+      <RazonSocial>Banco de Chile</RazonSocial>
+      <Direccion>Huerfanos 740</Direccion>
+      <eMail>cesiones@bancochile.cl</eMail>
+    </Cesionario>
+    <MontoCesion>1878317</MontoCesion>
+    <UltimoVencimiento>2026-07-13</UltimoVencimiento>
+    <TmstCesion>2026-06-08T12:00:00</TmstCesion>
+  </DocumentoCesion>
+</Cesion>  </Cesiones>
+</DocumentoAEC>
+</AEC>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<EnvioDTE xmlns="http://www.sii.cl/SiiDte" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+<SetDTE ID="SDTE100">
+  <Caratula version="1.0">
+    <RutEmisor>76146382-9</RutEmisor>
+    <RutReceptor>76727040-2</RutReceptor>
+    <FchResol>2014-10-21</FchResol>
+    <NroResol>99</NroResol>
+    <TmstFirmaEnv>2026-06-13T10:00:00</TmstFirmaEnv>
+  </Caratula>
+<DTE version="1.0">
+<Documento ID="MiPE100">
+    <Encabezado>
+      <IdDoc>
+        <TipoDTE>33</TipoDTE>
+        <Folio>100</Folio>
+        <FchEmis>2026-06-13</FchEmis>
+        <FmaPago>2</FmaPago>
+      </IdDoc>
+      <Emisor>
+        <RUTEmisor>76146382-9</RUTEmisor>
+        <RznSoc>INGENIERIA GEORADAR CHILE SPA</RznSoc>
+        <GiroEmis>SERVICIOS DE INGENIERIA Y PROSPECCION</GiroEmis>
+        <CorreoEmisor>contacto@georadarchile.cl</CorreoEmisor>
+        <DirOrigen>ARQ. GABRIEL OVALLE 4348</DirOrigen>
+        <CmnaOrigen>NUNOA</CmnaOrigen>
+        <CiudadOrigen>SANTIAGO</CiudadOrigen>
+      </Emisor>
+      <Receptor>
+        <RUTRecep>76727040-2</RUTRecep>
+        <RznSocRecep>MINERA CENTINELA</RznSocRecep>
+        <GiroRecep>EXTRACCION Y PROCESAMIENTO DE COBRE</GiroRecep>
+        <DirRecep>APOQUINDO 4001</DirRecep>
+        <CmnaRecep>LAS CONDES</CmnaRecep>
+        <CiudadRecep>SANTIAGO</CiudadRecep>
+      </Receptor>
+      <Totales>
+        <MntNeto>2450000</MntNeto>
+        <TasaIVA>19.00</TasaIVA>
+        <IVA>465500</IVA>
+        <MntTotal>2915500</MntTotal>
+      </Totales>
+    </Encabezado>
+    <Detalle>
+      <NroLinDet>1</NroLinDet>
+      <NmbItem>Levantamiento Geo Radar</NmbItem>
+      <DscItem>Servicio de prospección subsuelo sector norte</DscItem>
+      <QtyItem>1.00</QtyItem>
+      <UnmdItem>gl</UnmdItem>
+      <PrcItem>2450000.00</PrcItem>
+      <MontoItem>2450000</MontoItem>
+    </Detalle>
+    <Referencia>
+      <NroLinRef>1</NroLinRef>
+      <TpoDocRef>HES</TpoDocRef>
+      <FolioRef>1000000100</FolioRef>
+      <FchRef>2026-06-13</FchRef>
+    </Referencia>
+    <TmstFirma>2026-06-13T10:00:00</TmstFirma>
+  </Documento>
+</DTE></SetDTE>
+</EnvioDTE>
