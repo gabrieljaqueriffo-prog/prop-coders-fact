@@ -197,7 +197,11 @@ function App() {
             ))}
 
           {vista === "dashboard" && (
-            <Dashboard facturas={facturas} diasAlertaVencimiento={alertConfig.diasAntesVencimiento} />
+            <Dashboard
+              facturas={facturas}
+              gestiones={gestiones}
+              diasAlertaVencimiento={alertConfig.diasAntesVencimiento}
+            />
           )}
 
           {vista === "clientes" && (

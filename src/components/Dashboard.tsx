@@ -10,11 +10,13 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { Factura } from "../types";
+import type { Factura, GestionCobro, GestionEstado } from "../types";
+import { GESTION_ESTADO_LABEL, facturaId } from "../types";
 import { formatCLP } from "../utils/formatters";
 
 interface DashboardProps {
   facturas: Factura[];
+  gestiones: GestionCobro[];
   diasAlertaVencimiento: number;
 }
 
@@ -23,7 +25,7 @@ function diasHasta(fecha: string): number {
   return Math.ceil(ms / (1000 * 60 * 60 * 24));
 }
 
-export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
+export function Dashboard({ facturas, gestiones, diasAlertaVencimiento }: DashboardProps) {
   const totalFacturado = useMemo(() => facturas.reduce((sum, f) => sum + f.totales.total, 0), [facturas]);
   const totalIVA = useMemo(() => facturas.reduce((sum, f) => sum + f.totales.iva, 0), [facturas]);
 
@@ -32,6 +34,22 @@ export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
     for (const f of facturas) counts[f.estado]++;
     return counts;
   }, [facturas]);
+
+  const conteoPorGestion = useMemo(() => {
+    const counts: Record<GestionEstado, number> = {
+      sin_contactar: 0,
+      contactado: 0,
+      promesa_pago: 0,
+      en_mora: 0,
+      pagado: 0,
+    };
+    for (const f of facturas) {
+      const id = facturaId(f);
+      const estado = gestiones.find((g) => g.facturaId === id)?.estado ?? "sin_contactar";
+      counts[estado]++;
+    }
+    return counts;
+  }, [facturas, gestiones]);
 
   const topReceptores = useMemo(() => {
     const totals = new Map<string, number>();
@@ -78,13 +96,27 @@ export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
           <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">{facturas.length}</p>
         </div>
         <div className="rounded border border-slate-300 bg-white px-3 py-2.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Por estado</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Estado SII / cesión</p>
           <p className="mt-1 text-[13px] text-slate-600">
             <span className="font-semibold text-slate-900">{conteoPorEstado.pendiente}</span> pendientes ·{" "}
             <span className="font-semibold text-slate-900">{conteoPorEstado.cedida}</span> cedidas ·{" "}
             <span className="font-semibold text-slate-900">{conteoPorEstado.vencida}</span> vencidas
           </p>
         </div>
+      </div>
+
+      <div className="rounded border border-slate-300 bg-white px-3 py-2.5">
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          Estado de cobranza (gestión interna)
+        </p>
+        <p className="text-[13px] text-slate-600">
+          {Object.entries(GESTION_ESTADO_LABEL).map(([key, label], idx) => (
+            <span key={key}>
+              {idx > 0 && " · "}
+              <span className="font-semibold text-slate-900">{conteoPorGestion[key as GestionEstado]}</span> {label}
+            </span>
+          ))}
+        </p>
       </div>
 
       {alertas.length > 0 && (

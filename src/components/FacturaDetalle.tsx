@@ -129,9 +129,11 @@ export function FacturaDetalle({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <div
-        className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-md bg-white shadow-lg"
+        className="flex resize overflow-auto rounded-md bg-white shadow-lg [resize:both]"
+        style={{ width: "min(72rem, 96vw)", height: "min(92vh, 900px)", minWidth: "480px", minHeight: "360px", maxWidth: "96vw", maxHeight: "96vh" }}
         onClick={(e) => e.stopPropagation()}
       >
+      <div className="flex h-full w-full flex-col">
         <div className="flex shrink-0 items-start justify-between border-b border-slate-200 px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold">
@@ -146,8 +148,8 @@ export function FacturaDetalle({
           </button>
         </div>
 
-        <div className="grid flex-1 grid-cols-1 gap-6 overflow-y-auto px-6 py-5 lg:grid-cols-2">
-          <div className="space-y-4">
+        <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 py-5 lg:flex-row">
+          <div className="min-w-[320px] shrink-0 resize-x space-y-4 overflow-auto lg:w-1/2" style={{ maxWidth: "85%" }}>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="rounded border border-slate-200 p-3">
                 <h3 className="mb-1 text-xs font-semibold uppercase text-slate-500">Emisor</h3>
@@ -242,7 +244,7 @@ export function FacturaDetalle({
             )}
           </div>
 
-          <div className="space-y-4">
+          <div className="min-w-0 flex-1 space-y-4 overflow-auto">
             <div className="rounded border border-slate-200 p-3">
               <h3 className="mb-2 text-xs font-semibold uppercase text-slate-500">Plazo y vencimiento</h3>
               {(() => {
@@ -404,6 +406,7 @@ export function FacturaDetalle({
             Guardar y cerrar
           </button>
         </div>
+      </div>
       </div>
 
       {previewTemplate && (
