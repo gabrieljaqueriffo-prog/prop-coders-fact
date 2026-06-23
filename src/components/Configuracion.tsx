@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { AlertConfig, MessageTemplate } from "../types";
+import { SincronizarSII } from "./SincronizarSII";
 
 interface ConfiguracionProps {
   alertConfig: AlertConfig;
@@ -26,6 +27,8 @@ export function Configuracion({
 
   return (
     <div className="space-y-6">
+      <SincronizarSII />
+
       <div className="rounded border border-gray-200 p-4">
         <h3 className="mb-2 text-sm font-semibold text-gray-700">Alertas de vencimiento</h3>
         <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">
