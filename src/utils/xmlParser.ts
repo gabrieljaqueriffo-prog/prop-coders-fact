@@ -9,7 +9,7 @@ const getAll = (node: Document | Element, tag: string): Element[] =>
   Array.from(node.getElementsByTagNameNS(NS, tag));
 
 const toNumber = (s: string): number => {
-  const n = parseFloat(s.replace(/\./g, "").replace(",", "."));
+  const n = parseFloat(s);
   return Number.isNaN(n) ? 0 : n;
 };
 
@@ -82,8 +82,9 @@ export function parseAEC(xmlString: string): Factura {
   }
 
   const root = doc.documentElement;
-  if (root.localName !== "AEC" && root.localName !== "DTE") {
-    throw new Error("El XML no corresponde a un documento AEC/DTE del SII.");
+  const ROOTS_VALIDOS = ["AEC", "DTE", "EnvioDTE"];
+  if (!ROOTS_VALIDOS.includes(root.localName)) {
+    throw new Error("El XML no corresponde a un documento AEC/DTE/EnvioDTE del SII.");
   }
 
   const tasa = toNumber(get(doc, "TasaIVA"));
