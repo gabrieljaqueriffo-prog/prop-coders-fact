@@ -1,16 +1,22 @@
 import { useState } from "react";
-import type { Cliente } from "../types";
+import type { Cliente, Factura, GestionCobro } from "../types";
+import { ClienteDetalle } from "./ClienteDetalle";
+import { analizarRiesgoCliente, RIESGO_BADGE, RIESGO_LABEL } from "../utils/risk";
+import { facturaId } from "../types";
 
 interface ClientesViewProps {
   clientes: Cliente[];
   onChange: (clientes: Cliente[]) => void;
   readOnly: boolean;
+  facturas: Factura[];
+  gestiones: GestionCobro[];
+  onVerFactura?: (factura: Factura) => void;
 }
 
 const VACIO: Cliente = { rut: "", nombre: "", email: "", whatsapp: "", notas: "" };
 
-export function ClientesView({ clientes, onChange, readOnly }: ClientesViewProps) {
-  const [editando, setEditando] = useState<Cliente | null>(null);
+export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones, onVerFactura }: ClientesViewProps) {
+  const [seleccionado, setSeleccionado] = useState<{ cliente: Cliente; esNuevo: boolean } | null>(null);
   const [busqueda, setBusqueda] = useState("");
 
   const filtrados = clientes.filter((c) =>
@@ -19,12 +25,8 @@ export function ClientesView({ clientes, onChange, readOnly }: ClientesViewProps
 
   const handleGuardar = (cliente: Cliente) => {
     const existe = clientes.some((c) => c.rut === cliente.rut);
-    if (existe) {
-      onChange(clientes.map((c) => (c.rut === cliente.rut ? cliente : c)));
-    } else {
-      onChange([...clientes, cliente]);
-    }
-    setEditando(null);
+    onChange(existe ? clientes.map((c) => (c.rut === cliente.rut ? cliente : c)) : [...clientes, cliente]);
+    setSeleccionado(null);
   };
 
   const handleEliminar = (rut: string) => {
@@ -42,7 +44,7 @@ export function ClientesView({ clientes, onChange, readOnly }: ClientesViewProps
         />
         {!readOnly && (
           <button
-            onClick={() => setEditando(VACIO)}
+            onClick={() => setSeleccionado({ cliente: VACIO, esNuevo: true })}
             className="whitespace-nowrap rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
           >
             Nuevo cliente
@@ -54,37 +56,58 @@ export function ClientesView({ clientes, onChange, readOnly }: ClientesViewProps
         <table className="w-full text-sm">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500"></th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">RUT</th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Nombre</th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Email</th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">WhatsApp</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Notas</th>
-              {!readOnly && <th className="px-3 py-2"></th>}
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Riesgo</th>
+              <th className="px-3 py-2"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {filtrados.map((c) => (
-              <tr key={c.rut}>
-                <td className="px-3 py-2">{c.rut}</td>
-                <td className="px-3 py-2 font-medium">{c.nombre}</td>
-                <td className="px-3 py-2 text-gray-600">{c.email}</td>
-                <td className="px-3 py-2 text-gray-600">{c.whatsapp}</td>
-                <td className="px-3 py-2 text-gray-600">{c.notas}</td>
-                {!readOnly && (
-                  <td className="px-3 py-2 text-right">
-                    <button onClick={() => setEditando(c)} className="mr-2 text-gray-500 hover:text-gray-800">
-                      Editar
-                    </button>
-                    <button onClick={() => handleEliminar(c.rut)} className="text-red-500 hover:text-red-700">
-                      Eliminar
-                    </button>
+            {filtrados.map((c) => {
+              const facturasCliente = facturas.filter((f) => f.receptor.rut === c.rut);
+              const idsCliente = new Set(facturasCliente.map(facturaId));
+              const gestionesCliente = gestiones.filter((g) => idsCliente.has(g.facturaId));
+              const riesgo = analizarRiesgoCliente(facturasCliente, gestionesCliente);
+              return (
+                <tr
+                  key={c.rut}
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={() => setSeleccionado({ cliente: c, esNuevo: false })}
+                >
+                  <td className="px-3 py-2">
+                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50">
+                      {c.logo ? (
+                        <img src={c.logo} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <span className="text-[10px] text-gray-400">—</span>
+                      )}
+                    </div>
                   </td>
-                )}
-              </tr>
-            ))}
+                  <td className="px-3 py-2">{c.rut}</td>
+                  <td className="px-3 py-2 font-medium">{c.nombre}</td>
+                  <td className="px-3 py-2 text-gray-600">{c.email}</td>
+                  <td className="px-3 py-2 text-gray-600">{c.whatsapp}</td>
+                  <td className="px-3 py-2">
+                    <span className={`rounded-full px-2 py-1 text-xs font-medium ${RIESGO_BADGE[riesgo.nivel]}`}>
+                      {RIESGO_LABEL[riesgo.nivel]}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2 text-right" onClick={(e) => e.stopPropagation()}>
+                    {!readOnly && (
+                      <button onClick={() => handleEliminar(c.rut)} className="text-red-500 hover:text-red-700">
+                        Eliminar
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
             {filtrados.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-3 py-6 text-center text-gray-400">
+                <td colSpan={7} className="px-3 py-6 text-center text-gray-400">
                   No hay clientes.
                 </td>
               </tr>
@@ -93,99 +116,18 @@ export function ClientesView({ clientes, onChange, readOnly }: ClientesViewProps
         </table>
       </div>
 
-      {editando && (
-        <ClienteForm
-          cliente={editando}
-          editandoExistente={clientes.some((c) => c.rut === editando.rut)}
+      {seleccionado && (
+        <ClienteDetalle
+          cliente={seleccionado.cliente}
+          esNuevo={seleccionado.esNuevo}
+          facturas={facturas}
+          gestiones={gestiones}
+          readOnly={readOnly}
           onGuardar={handleGuardar}
-          onCancelar={() => setEditando(null)}
+          onClose={() => setSeleccionado(null)}
+          onVerFactura={onVerFactura}
         />
       )}
-    </div>
-  );
-}
-
-function ClienteForm({
-  cliente,
-  editandoExistente,
-  onGuardar,
-  onCancelar,
-}: {
-  cliente: Cliente;
-  editandoExistente: boolean;
-  onGuardar: (c: Cliente) => void;
-  onCancelar: () => void;
-}) {
-  const [form, setForm] = useState(cliente);
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onCancelar}>
-      <form
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!form.rut.trim()) return;
-          onGuardar(form);
-        }}
-        className="w-full max-w-md space-y-3 rounded-lg bg-white p-6 shadow-xl"
-      >
-        <h2 className="mb-2 text-lg font-semibold">{editandoExistente ? "Editar cliente" : "Nuevo cliente"}</h2>
-
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">RUT</label>
-          <input
-            value={form.rut}
-            onChange={(e) => setForm({ ...form, rut: e.target.value })}
-            disabled={editandoExistente}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100"
-            required
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Nombre</label>
-          <input
-            value={form.nombre}
-            onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Email</label>
-          <input
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            type="email"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">WhatsApp</label>
-          <input
-            value={form.whatsapp}
-            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-            placeholder="+56912345678"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Notas</label>
-          <textarea
-            value={form.notas}
-            onChange={(e) => setForm({ ...form, notas: e.target.value })}
-            rows={3}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
-
-        <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onCancelar} className="rounded px-4 py-2 text-sm text-gray-500 hover:text-gray-800">
-            Cancelar
-          </button>
-          <button type="submit" className="rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
-            Guardar
-          </button>
-        </div>
-      </form>
     </div>
   );
 }

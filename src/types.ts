@@ -118,6 +118,7 @@ export interface GestionCobro {
   facturaId: string;
   estado: GestionEstado;
   notas: string;
+  fechaPago?: string;
 }
 
 export interface LogEntry {
@@ -134,6 +135,7 @@ export interface Cliente {
   email: string;
   whatsapp: string;
   notas: string;
+  logo?: string;
 }
 
 export interface MessageTemplate {

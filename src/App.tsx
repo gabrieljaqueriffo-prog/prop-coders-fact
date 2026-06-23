@@ -162,7 +162,14 @@ function App() {
       )}
 
       {vista === "clientes" && (
-        <ClientesView clientes={clientes} onChange={setClientes} readOnly={!permisos.gestionarClientes} />
+        <ClientesView
+          clientes={clientes}
+          onChange={setClientes}
+          readOnly={!permisos.gestionarClientes}
+          facturas={facturas}
+          gestiones={gestiones}
+          onVerFactura={setSeleccionada}
+        />
       )}
 
       {vista === "configuracion" &&

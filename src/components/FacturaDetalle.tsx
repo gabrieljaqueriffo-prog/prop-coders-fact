@@ -49,7 +49,8 @@ export function FacturaDetalle({
   const id = facturaId(factura);
 
   const handleEstadoChange = (estado: GestionEstado) => {
-    onUpdateGestion({ facturaId: id, estado, notas });
+    const fechaPago = estado === "pagado" ? (gestion?.fechaPago ?? new Date().toISOString().slice(0, 10)) : gestion?.fechaPago;
+    onUpdateGestion({ facturaId: id, estado, notas, fechaPago });
     onAddLog({
       id: crypto.randomUUID(),
       facturaId: id,
@@ -61,7 +62,7 @@ export function FacturaDetalle({
 
   const handleNotasBlur = () => {
     if (notas === (gestion?.notas ?? "")) return;
-    onUpdateGestion({ facturaId: id, estado: gestion?.estado ?? "sin_contactar", notas });
+    onUpdateGestion({ facturaId: id, estado: gestion?.estado ?? "sin_contactar", notas, fechaPago: gestion?.fechaPago });
     onAddLog({
       id: crypto.randomUUID(),
       facturaId: id,
