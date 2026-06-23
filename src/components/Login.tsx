@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Role, Usuario } from "../types";
+import { ROLE_LABEL } from "../types";
 
 interface LoginProps {
   onLogin: (usuario: Usuario) => void;
@@ -32,24 +33,18 @@ export function Login({ onLogin }: LoginProps) {
 
         <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Rol</label>
         <div className="mb-4 flex gap-2">
-          <button
-            type="button"
-            onClick={() => setRole("admin")}
-            className={`flex-1 rounded border px-3 py-2 text-sm font-medium ${
-              role === "admin" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300 text-gray-600"
-            }`}
-          >
-            Administrador
-          </button>
-          <button
-            type="button"
-            onClick={() => setRole("viewer")}
-            className={`flex-1 rounded border px-3 py-2 text-sm font-medium ${
-              role === "viewer" ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300 text-gray-600"
-            }`}
-          >
-            Visualizador
-          </button>
+          {(["admin", "administrativo", "viewer"] as Role[]).map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setRole(r)}
+              className={`flex-1 rounded border px-2 py-2 text-xs font-medium ${
+                role === r ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300 text-gray-600"
+              }`}
+            >
+              {ROLE_LABEL[r]}
+            </button>
+          ))}
         </div>
 
         <button

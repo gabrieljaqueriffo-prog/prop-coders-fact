@@ -5,6 +5,8 @@ import { formatCLP, formatRUT } from "../utils/formatters";
 interface FacturaTableProps {
   facturas: Factura[];
   onSelect: (factura: Factura) => void;
+  onContactar?: (factura: Factura, canal: "email" | "whatsapp") => void;
+  puedeEnviarMensajes: boolean;
 }
 
 type SortKey = "folio" | "fechaEmision" | "emisor" | "receptor" | "neto" | "iva" | "total" | "estado";
@@ -48,7 +50,7 @@ function exportToCSV(facturas: Factura[]) {
   URL.revokeObjectURL(url);
 }
 
-export function FacturaTable({ facturas, onSelect }: FacturaTableProps) {
+export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensajes }: FacturaTableProps) {
   const [search, setSearch] = useState("");
   const [estadoFiltro, setEstadoFiltro] = useState<EstadoFactura | "todos">("todos");
   const [fechaDesde, setFechaDesde] = useState("");
@@ -211,9 +213,29 @@ export function FacturaTable({ facturas, onSelect }: FacturaTableProps) {
                   </span>
                 </td>
                 <td className="px-3 py-2">
-                  <button onClick={() => onSelect(f)} className="text-blue-600 hover:underline">
-                    Ver detalle
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button onClick={() => onSelect(f)} className="text-blue-600 hover:underline">
+                      Ver detalle
+                    </button>
+                    {puedeEnviarMensajes && onContactar && (
+                      <>
+                        <button
+                          title="Enviar email"
+                          onClick={() => onContactar(f, "email")}
+                          className="text-gray-500 hover:text-gray-800"
+                        >
+                          ✉️
+                        </button>
+                        <button
+                          title="Enviar WhatsApp"
+                          onClick={() => onContactar(f, "whatsapp")}
+                          className="text-gray-500 hover:text-gray-800"
+                        >
+                          💬
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

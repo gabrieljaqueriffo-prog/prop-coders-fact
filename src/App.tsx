@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import type { AlertConfig, Cliente, Factura, GestionCobro, LogEntry, MessageTemplate, Usuario } from "./types";
-import { facturaId } from "./types";
+import { PERMISOS_POR_ROL, ROLE_LABEL, facturaId } from "./types";
 import { storage } from "./utils/storage";
+import { buildMailtoLink, buildWhatsappLink } from "./utils/messaging";
 import { FileUpload } from "./components/FileUpload";
 import { FacturaTable } from "./components/FacturaTable";
 import { FacturaDetalle } from "./components/FacturaDetalle";
@@ -11,6 +12,12 @@ import { Configuracion } from "./components/Configuracion";
 import { Login } from "./components/Login";
 
 type Vista = "facturas" | "dashboard" | "clientes" | "configuracion";
+
+// Datos de contacto de prueba para autocompletar clientes nuevos en este prototipo sin backend.
+const CONTACTO_PRUEBA = {
+  email: "gabriel.jaque.riffo@gmail.com",
+  whatsapp: "+584125065488",
+};
 
 function App() {
   const [usuario, setUsuario] = useState<Usuario | null>(() => storage.loadUsuario());
@@ -35,7 +42,7 @@ function App() {
     return <Login onLogin={setUsuario} />;
   }
 
-  const readOnly = usuario.role !== "admin";
+  const permisos = PERMISOS_POR_ROL[usuario.role];
 
   const handleLoaded = (nuevas: Factura[]) => {
     setFacturas((prev) => {
@@ -47,7 +54,13 @@ function App() {
       const existentes = new Set(prev.map((c) => c.rut));
       const nuevosClientes = nuevas
         .filter((f) => !existentes.has(f.receptor.rut))
-        .map((f) => ({ rut: f.receptor.rut, nombre: f.receptor.nombre, email: "", whatsapp: "", notas: "" }));
+        .map((f) => ({
+          rut: f.receptor.rut,
+          nombre: f.receptor.nombre,
+          email: CONTACTO_PRUEBA.email,
+          whatsapp: CONTACTO_PRUEBA.whatsapp,
+          notas: "Contacto de prueba autocompletado al cargar el XML.",
+        }));
       const sinDuplicadosEntreSi = nuevosClientes.filter(
         (c, idx) => nuevosClientes.findIndex((x) => x.rut === c.rut) === idx,
       );
@@ -79,6 +92,21 @@ function App() {
     setLogs((prev) => [...prev, log]);
   };
 
+  const handleContactoRapido = (factura: Factura, canal: "email" | "whatsapp") => {
+    const template = templates.find((t) => t.canal === canal);
+    if (!template) return;
+    const cliente = clienteDe(factura);
+    const link = canal === "email" ? buildMailtoLink(template, factura, cliente) : buildWhatsappLink(template, factura, cliente);
+    handleAddLog({
+      id: crypto.randomUUID(),
+      facturaId: facturaId(factura),
+      timestamp: new Date().toISOString(),
+      actor: usuario.nombre,
+      accion: `Envió mensaje "${template.nombre}" por ${canal === "email" ? "email" : "WhatsApp"}`,
+    });
+    window.open(link, "_blank");
+  };
+
   const NAV_ITEMS: { id: Vista; label: string }[] = [
     { id: "facturas", label: "Facturas" },
     { id: "dashboard", label: "Dashboard" },
@@ -92,9 +120,9 @@ function App() {
         <h1 className="text-xl font-semibold text-gray-900">Facturas Electrónicas SII</h1>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">
-            {usuario.nombre} · {usuario.role === "admin" ? "Administrador" : "Visualizador"}
+            {usuario.nombre} · {ROLE_LABEL[usuario.role]}
           </span>
-          {facturas.length > 0 && !readOnly && (
+          {facturas.length > 0 && permisos.limpiarFacturas && (
             <button onClick={handleClear} className="text-sm text-gray-500 hover:text-red-600">
               Limpiar todo
             </button>
@@ -105,7 +133,7 @@ function App() {
         </div>
       </header>
 
-      {!readOnly && (
+      {permisos.cargarFacturas && (
         <div className="mb-6">
           <FileUpload onLoaded={handleLoaded} />
         </div>
@@ -127,7 +155,12 @@ function App() {
 
       {vista === "facturas" &&
         (facturas.length > 0 ? (
-          <FacturaTable facturas={facturas} onSelect={setSeleccionada} />
+          <FacturaTable
+            facturas={facturas}
+            onSelect={setSeleccionada}
+            onContactar={handleContactoRapido}
+            puedeEnviarMensajes={permisos.enviarMensajes}
+          />
         ) : (
           <p className="py-12 text-center text-sm text-gray-400">Aún no hay facturas cargadas.</p>
         ))}
@@ -137,11 +170,11 @@ function App() {
       )}
 
       {vista === "clientes" && (
-        <ClientesView clientes={clientes} onChange={setClientes} readOnly={readOnly} />
+        <ClientesView clientes={clientes} onChange={setClientes} readOnly={!permisos.gestionarClientes} />
       )}
 
       {vista === "configuracion" &&
-        (readOnly ? (
+        (!permisos.gestionarConfiguracion ? (
           <p className="py-12 text-center text-sm text-gray-400">
             Solo el administrador puede modificar la configuración.
           </p>
@@ -163,7 +196,7 @@ function App() {
           templates={templates}
           logs={logsDe(seleccionada)}
           actor={usuario.nombre}
-          readOnly={readOnly}
+          readOnly={!permisos.gestionarCobranza}
           onUpdateGestion={handleUpdateGestion}
           onAddLog={handleAddLog}
         />

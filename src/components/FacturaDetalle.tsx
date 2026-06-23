@@ -231,7 +231,7 @@ export function FacturaDetalle({
                       : buildWhatsappLink(t, factura, cliente),
                   )
                 }
-                disabled={t.canal === "email" ? !cliente?.email : !cliente?.whatsapp}
+                disabled={readOnly || (t.canal === "email" ? !cliente?.email : !cliente?.whatsapp)}
                 className="rounded border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {t.canal === "email" ? "✉️" : "💬"} {t.nombre}

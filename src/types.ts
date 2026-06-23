@@ -55,7 +55,49 @@ export interface Factura {
 
 export const facturaId = (f: Pick<Factura, "emisor" | "folio">): string => `${f.emisor.rut}-${f.folio}`;
 
-export type Role = "admin" | "viewer";
+export type Role = "admin" | "administrativo" | "viewer";
+
+export const ROLE_LABEL: Record<Role, string> = {
+  admin: "Administrador",
+  administrativo: "Administrativo",
+  viewer: "Visualizador",
+};
+
+export interface Permisos {
+  cargarFacturas: boolean;
+  limpiarFacturas: boolean;
+  gestionarClientes: boolean;
+  gestionarCobranza: boolean;
+  enviarMensajes: boolean;
+  gestionarConfiguracion: boolean;
+}
+
+export const PERMISOS_POR_ROL: Record<Role, Permisos> = {
+  admin: {
+    cargarFacturas: true,
+    limpiarFacturas: true,
+    gestionarClientes: true,
+    gestionarCobranza: true,
+    enviarMensajes: true,
+    gestionarConfiguracion: true,
+  },
+  administrativo: {
+    cargarFacturas: true,
+    limpiarFacturas: false,
+    gestionarClientes: true,
+    gestionarCobranza: true,
+    enviarMensajes: true,
+    gestionarConfiguracion: false,
+  },
+  viewer: {
+    cargarFacturas: false,
+    limpiarFacturas: false,
+    gestionarClientes: false,
+    gestionarCobranza: false,
+    enviarMensajes: false,
+    gestionarConfiguracion: false,
+  },
+};
 
 export interface Usuario {
   nombre: string;
