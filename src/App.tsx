@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import type { AlertConfig, Cliente, Factura, GestionCobro, LogEntry, MessageTemplate, Usuario } from "./types";
 import { PERMISOS_POR_ROL, ROLE_LABEL, facturaId } from "./types";
 import { storage } from "./utils/storage";
-import { buildMailtoLink, buildWhatsappLink } from "./utils/messaging";
 import { FileUpload } from "./components/FileUpload";
 import { FacturaTable } from "./components/FacturaTable";
 import { FacturaDetalle } from "./components/FacturaDetalle";
@@ -10,6 +9,7 @@ import { Dashboard } from "./components/Dashboard";
 import { ClientesView } from "./components/ClientesView";
 import { Configuracion } from "./components/Configuracion";
 import { Login } from "./components/Login";
+import { MessagePreviewModal } from "./components/MessagePreviewModal";
 
 type Vista = "facturas" | "dashboard" | "clientes" | "configuracion";
 
@@ -29,6 +29,7 @@ function App() {
   const [alertConfig, setAlertConfig] = useState<AlertConfig>(() => storage.loadAlertConfig());
   const [vista, setVista] = useState<Vista>("facturas");
   const [seleccionada, setSeleccionada] = useState<Factura | null>(null);
+  const [previewRapido, setPreviewRapido] = useState<{ factura: Factura; template: MessageTemplate } | null>(null);
 
   useEffect(() => storage.saveFacturas(facturas), [facturas]);
   useEffect(() => storage.saveClientes(clientes), [clientes]);
@@ -95,16 +96,7 @@ function App() {
   const handleContactoRapido = (factura: Factura, canal: "email" | "whatsapp") => {
     const template = templates.find((t) => t.canal === canal);
     if (!template) return;
-    const cliente = clienteDe(factura);
-    const link = canal === "email" ? buildMailtoLink(template, factura, cliente) : buildWhatsappLink(template, factura, cliente);
-    handleAddLog({
-      id: crypto.randomUUID(),
-      facturaId: facturaId(factura),
-      timestamp: new Date().toISOString(),
-      actor: usuario.nombre,
-      accion: `Envió mensaje "${template.nombre}" por ${canal === "email" ? "email" : "WhatsApp"}`,
-    });
-    window.open(link, "_blank");
+    setPreviewRapido({ factura, template });
   };
 
   const NAV_ITEMS: { id: Vista; label: string }[] = [
@@ -199,6 +191,26 @@ function App() {
           readOnly={!permisos.gestionarCobranza}
           onUpdateGestion={handleUpdateGestion}
           onAddLog={handleAddLog}
+        />
+      )}
+
+      {previewRapido && (
+        <MessagePreviewModal
+          factura={previewRapido.factura}
+          cliente={clienteDe(previewRapido.factura)}
+          template={previewRapido.template}
+          onClose={() => setPreviewRapido(null)}
+          onSend={() =>
+            handleAddLog({
+              id: crypto.randomUUID(),
+              facturaId: facturaId(previewRapido.factura),
+              timestamp: new Date().toISOString(),
+              actor: usuario.nombre,
+              accion: `Envió mensaje "${previewRapido.template.nombre}" por ${
+                previewRapido.template.canal === "email" ? "email" : "WhatsApp"
+              }`,
+            })
+          }
         />
       )}
     </div>

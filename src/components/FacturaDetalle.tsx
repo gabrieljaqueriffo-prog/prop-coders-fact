@@ -3,7 +3,7 @@ import type { Cliente, GestionCobro, GestionEstado, LogEntry, MessageTemplate } 
 import { GESTION_ESTADO_LABEL, facturaId } from "../types";
 import type { Factura } from "../types";
 import { formatCLP, formatRUT } from "../utils/formatters";
-import { buildMailtoLink, buildWhatsappLink } from "../utils/messaging";
+import { MessagePreviewModal } from "./MessagePreviewModal";
 
 interface FacturaDetalleProps {
   factura: Factura;
@@ -45,6 +45,7 @@ export function FacturaDetalle({
   onAddLog,
 }: FacturaDetalleProps) {
   const [notas, setNotas] = useState(gestion?.notas ?? "");
+  const [previewTemplate, setPreviewTemplate] = useState<MessageTemplate | null>(null);
   const id = facturaId(factura);
 
   const handleEstadoChange = (estado: GestionEstado) => {
@@ -70,7 +71,7 @@ export function FacturaDetalle({
     });
   };
 
-  const handleContacto = (template: MessageTemplate, link: string) => {
+  const handleEnviar = (template: MessageTemplate) => {
     onAddLog({
       id: crypto.randomUUID(),
       facturaId: id,
@@ -78,7 +79,6 @@ export function FacturaDetalle({
       actor,
       accion: `Envió mensaje "${template.nombre}" por ${template.canal === "email" ? "email" : "WhatsApp"}`,
     });
-    window.open(link, "_blank");
   };
 
   return (
@@ -223,15 +223,8 @@ export function FacturaDetalle({
             {templates.map((t) => (
               <button
                 key={t.id}
-                onClick={() =>
-                  handleContacto(
-                    t,
-                    t.canal === "email"
-                      ? buildMailtoLink(t, factura, cliente)
-                      : buildWhatsappLink(t, factura, cliente),
-                  )
-                }
-                disabled={readOnly || (t.canal === "email" ? !cliente?.email : !cliente?.whatsapp)}
+                onClick={() => setPreviewTemplate(t)}
+                disabled={readOnly}
                 className="rounded border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {t.canal === "email" ? "✉️" : "💬"} {t.nombre}
@@ -263,6 +256,16 @@ export function FacturaDetalle({
           Descargar XML original
         </button>
       </div>
+
+      {previewTemplate && (
+        <MessagePreviewModal
+          factura={factura}
+          cliente={cliente}
+          template={previewTemplate}
+          onClose={() => setPreviewTemplate(null)}
+          onSend={() => handleEnviar(previewTemplate)}
+        />
+      )}
     </div>
   );
 }
