@@ -39,13 +39,18 @@ function parseReferencias(doc: Document): Referencia[] {
 }
 
 function parseCesion(doc: Document): Cesion | undefined {
-  const montoCesionStr = get(doc, "MontoCesion");
+  const documentoCesion = getAll(doc, "DocumentoCesion")[0];
+  if (!documentoCesion) return undefined;
+
+  const montoCesionStr = get(documentoCesion, "MontoCesion");
   if (!montoCesionStr) return undefined;
 
+  const cesionarioEl = getAll(documentoCesion, "Cesionario")[0];
+
   return {
-    cesionario: get(doc, "RazonSocialCesionario") || get(doc, "RazonSocial"),
+    cesionario: cesionarioEl ? get(cesionarioEl, "RazonSocial") : "",
     monto: toNumber(montoCesionStr),
-    vencimiento: get(doc, "UltimoVencimiento"),
+    vencimiento: get(documentoCesion, "UltimoVencimiento"),
   };
 }
 
@@ -58,6 +63,14 @@ function calcularEstado(cesion: Cesion | undefined): EstadoFactura {
     return "cedida";
   }
   return "pendiente";
+}
+
+export async function readXmlFile(file: File): Promise<string> {
+  const buffer = await file.arrayBuffer();
+  const declaration = new TextDecoder("ascii").decode(buffer.slice(0, 100));
+  const match = declaration.match(/encoding=["']([^"']+)["']/i);
+  const encoding = match ? match[1] : "utf-8";
+  return new TextDecoder(encoding).decode(buffer);
 }
 
 export function parseAEC(xmlString: string): Factura {
