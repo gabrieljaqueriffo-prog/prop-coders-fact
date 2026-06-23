@@ -52,7 +52,7 @@ export function FacturaDetalle({
   const id = facturaId(factura);
 
   const handleEstadoChange = (estado: GestionEstado) => {
-    if (estado === "pagado" && !gestion?.fechaPago) {
+    if (estado === "pagado" && gestion?.estado !== "pagado") {
       setMostrarConfirmarPago(true);
       return;
     }
