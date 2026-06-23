@@ -113,14 +113,14 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
 
       <div className="grid grid-cols-7 gap-1">
         {celdas.map((fecha, idx) => {
-          if (!fecha) return <div key={idx} className="min-h-20 rounded border border-transparent" />;
+          if (!fecha) return <div key={idx} className="min-h-16 rounded border border-transparent" />;
           const eventosDia = eventosPorDia.get(fecha) ?? [];
           const esHoy = fecha === hoyStr;
           return (
             <button
               key={fecha}
               onClick={() => setDiaSeleccionado(fecha)}
-              className={`min-h-20 rounded border p-1 text-left align-top ${
+              className={`min-h-16 rounded border p-1 text-left align-top ${
                 esHoy ? "border-slate-800" : "border-slate-200"
               } hover:bg-slate-50`}
             >
@@ -140,7 +140,7 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
       {diaSeleccionado && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setDiaSeleccionado(null)}>
           <div
-            className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
+            className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3">

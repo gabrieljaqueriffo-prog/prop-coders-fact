@@ -29,7 +29,7 @@ export function Configuracion({
     <div className="space-y-6">
       <SincronizarSII />
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-md border border-slate-200 bg-white p-5 ">
         <h3 className="mb-2 text-sm font-semibold text-slate-700">Alertas de vencimiento</h3>
         <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">
           Días antes del vencimiento para alertar
@@ -45,14 +45,14 @@ export function Configuracion({
         />
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-md border border-slate-200 bg-white p-5 ">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-slate-700">Plantillas de mensaje</h3>
           <button
             onClick={() =>
               setEditando({ id: crypto.randomUUID(), nombre: "", canal: "email", asunto: "", cuerpo: "" })
             }
-            className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
+            className="rounded bg-blue-700 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600"
           >
             Nueva plantilla
           </button>
@@ -110,7 +110,7 @@ function TemplateForm({
           if (!form.nombre.trim()) return;
           onGuardar(form);
         }}
-        className="w-full max-w-md space-y-3 rounded-lg bg-white p-6 shadow-xl"
+        className="w-full max-w-md space-y-3 rounded-lg bg-white p-6 shadow-lg"
       >
         <h2 className="mb-2 text-lg font-semibold">Plantilla de mensaje</h2>
 
@@ -158,7 +158,7 @@ function TemplateForm({
           <button type="button" onClick={onCancelar} className="rounded px-4 py-2 text-sm text-slate-500 hover:text-slate-800">
             Cancelar
           </button>
-          <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
+          <button type="submit" className="rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
             Guardar
           </button>
         </div>

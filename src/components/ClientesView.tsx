@@ -45,27 +45,27 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
         {!readOnly && (
           <button
             onClick={() => setSeleccionado({ cliente: VACIO, esNuevo: true })}
-            className="whitespace-nowrap rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+            className="whitespace-nowrap rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Nuevo cliente
           </button>
         )}
       </div>
 
-      <div className="overflow-x-auto rounded border border-slate-200">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50">
+      <div className="overflow-x-auto rounded border border-slate-300 bg-white">
+        <table className="w-full text-[13px]">
+          <thead className="bg-slate-100">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500"></th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">RUT</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Nombre</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Email</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">WhatsApp</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Riesgo</th>
-              <th className="px-3 py-2"></th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500"></th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">RUT</th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">Nombre</th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">Email</th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">WhatsApp</th>
+              <th className="px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">Riesgo</th>
+              <th className="px-2.5 py-1.5"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-200">
             {filtrados.map((c) => {
               const facturasCliente = facturas.filter((f) => f.receptor.rut === c.rut);
               const idsCliente = new Set(facturasCliente.map(facturaId));
@@ -74,11 +74,11 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
               return (
                 <tr
                   key={c.rut}
-                  className="cursor-pointer hover:bg-slate-50"
+                  className="cursor-pointer hover:bg-blue-50/40"
                   onClick={() => setSeleccionado({ cliente: c, esNuevo: false })}
                 >
-                  <td className="px-3 py-2">
-                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded border border-slate-200 bg-slate-50">
+                  <td className="px-2.5 py-1.5">
+                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded border border-slate-200 bg-slate-100">
                       {c.logo ? (
                         <img src={c.logo} alt="" className="h-full w-full object-cover" />
                       ) : (
@@ -86,16 +86,16 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
                       )}
                     </div>
                   </td>
-                  <td className="px-3 py-2">{c.rut}</td>
-                  <td className="px-3 py-2 font-medium">{c.nombre}</td>
-                  <td className="px-3 py-2 text-slate-600">{c.email}</td>
-                  <td className="px-3 py-2 text-slate-600">{c.whatsapp}</td>
-                  <td className="px-3 py-2">
-                    <span className={`rounded-full px-2 py-1 text-xs font-medium ${RIESGO_BADGE[riesgo.nivel]}`}>
+                  <td className="px-2.5 py-1.5">{c.rut}</td>
+                  <td className="px-2.5 py-1.5 font-medium">{c.nombre}</td>
+                  <td className="px-2.5 py-1.5 text-slate-600">{c.email}</td>
+                  <td className="px-2.5 py-1.5 text-slate-600">{c.whatsapp}</td>
+                  <td className="px-2.5 py-1.5">
+                    <span className={`rounded px-1.5 py-0.5 text-[11px] font-medium ${RIESGO_BADGE[riesgo.nivel]}`}>
                       {RIESGO_LABEL[riesgo.nivel]}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-right" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-2.5 py-1.5 text-right" onClick={(e) => e.stopPropagation()}>
                     {!readOnly && (
                       <button onClick={() => handleEliminar(c.rut)} className="text-red-500 hover:text-red-700">
                         Eliminar

@@ -17,24 +17,24 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-900/40">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-md bg-blue-700 text-xl font-bold text-white shadow-lg shadow-blue-900/40">
             S
           </div>
           <h1 className="text-xl font-bold text-white">Facturas SII</h1>
           <p className="mt-1 text-sm text-slate-400">Gestión de cobranza y facturación electrónica</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-xl">
+        <form onSubmit={handleSubmit} className="rounded-md border border-slate-200 bg-white p-7 shadow-lg">
           <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
             Nombre
           </label>
           <input
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            className="mb-5 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            className="mb-5 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 transition focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100"
             placeholder="Tu nombre"
             autoFocus
           />
@@ -48,7 +48,7 @@ export function Login({ onLogin }: LoginProps) {
                 onClick={() => setRole(r)}
                 className={`flex-1 rounded-lg border px-2 py-2.5 text-xs font-medium transition ${
                   role === r
-                    ? "border-indigo-600 bg-indigo-600 text-white shadow-sm"
+                    ? "border-blue-700 bg-blue-700 text-white "
                     : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                 }`}
               >
@@ -59,7 +59,7 @@ export function Login({ onLogin }: LoginProps) {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
+            className="w-full rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white  transition hover:bg-blue-600"
           >
             Entrar
           </button>

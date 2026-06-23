@@ -129,7 +129,7 @@ export function FacturaDetalle({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <div
-        className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl"
+        className="flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-md bg-white shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-start justify-between border-b border-slate-200 px-6 py-4">
@@ -399,7 +399,7 @@ export function FacturaDetalle({
           </button>
           <button
             onClick={onClose}
-            className="rounded bg-indigo-600 px-5 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+            className="rounded bg-blue-700 px-5 py-2 text-sm font-medium text-white hover:bg-blue-600"
           >
             Guardar y cerrar
           </button>

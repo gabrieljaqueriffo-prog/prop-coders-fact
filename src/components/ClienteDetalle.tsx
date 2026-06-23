@@ -66,7 +66,7 @@ export function ClienteDetalle({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
+        className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg"
       >
         <div className="mb-4 flex items-start justify-between border-b border-slate-200 pb-4">
           <div className="flex items-center gap-4">
@@ -264,7 +264,7 @@ export function ClienteDetalle({
             <button type="button" onClick={onClose} className="rounded px-4 py-2 text-sm text-slate-500 hover:text-slate-800">
               Cancelar
             </button>
-            <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
+            <button type="submit" className="rounded bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
               Guardar
             </button>
           </div>

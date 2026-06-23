@@ -19,7 +19,7 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
+        className="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-start justify-between">
@@ -69,7 +69,7 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
             }}
             aria-disabled={!destinatario}
             className={`rounded px-4 py-2 text-sm font-medium text-white ${
-              destinatario ? "bg-indigo-600 hover:bg-indigo-500" : "pointer-events-none bg-slate-300"
+              destinatario ? "bg-blue-700 hover:bg-blue-600" : "pointer-events-none bg-slate-300"
             }`}
           >
             {template.canal === "email" ? "Abrir en mi correo" : "Abrir en WhatsApp"}

@@ -122,8 +122,8 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
 
   const Th = ({ label, sortable }: { label: string; sortable?: SortKey }) => (
     <th
-      className={`px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500 ${
-        sortable ? "cursor-pointer select-none hover:text-slate-700" : ""
+      className={`px-2.5 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500 ${
+        sortable ? "cursor-pointer select-none hover:text-slate-800" : ""
       }`}
       onClick={sortable ? () => toggleSort(sortable) : undefined}
     >
@@ -134,51 +134,71 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
 
   return (
     <div className="w-full">
-      <div className="mb-4 flex flex-wrap items-end gap-3">
+      <div className="mb-3 flex flex-wrap items-end gap-2 rounded border border-slate-300 bg-white p-2.5">
         <input
           type="text"
           placeholder="Buscar RUT, razón social, folio, ítem..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="min-w-[240px] flex-1 rounded border border-slate-300 px-3 py-2 text-sm"
+          className="min-w-[220px] flex-1 rounded border border-slate-300 px-2.5 py-1.5 text-[13px]"
         />
         <select
           value={estadoFiltro}
           onChange={(e) => setEstadoFiltro(e.target.value as EstadoFactura | "todos")}
-          className="rounded border border-slate-300 px-3 py-2 text-sm"
+          className="rounded border border-slate-300 px-2.5 py-1.5 text-[13px]"
         >
           <option value="todos">Todos los estados</option>
           <option value="pendiente">Pendiente</option>
           <option value="cedida">Cedida</option>
           <option value="vencida">Vencida</option>
         </select>
-        <label className="flex flex-col text-xs text-slate-500">
+        <label className="flex flex-col text-[11px] text-slate-500">
           Desde
-          <input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-sm" />
+          <input
+            type="date"
+            value={fechaDesde}
+            onChange={(e) => setFechaDesde(e.target.value)}
+            className="rounded border border-slate-300 px-2 py-1 text-[13px]"
+          />
         </label>
-        <label className="flex flex-col text-xs text-slate-500">
+        <label className="flex flex-col text-[11px] text-slate-500">
           Hasta
-          <input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-sm" />
+          <input
+            type="date"
+            value={fechaHasta}
+            onChange={(e) => setFechaHasta(e.target.value)}
+            className="rounded border border-slate-300 px-2 py-1 text-[13px]"
+          />
         </label>
-        <label className="flex flex-col text-xs text-slate-500">
+        <label className="flex flex-col text-[11px] text-slate-500">
           Monto mín.
-          <input type="number" value={montoMin} onChange={(e) => setMontoMin(e.target.value)} className="w-28 rounded border border-slate-300 px-2 py-1.5 text-sm" />
+          <input
+            type="number"
+            value={montoMin}
+            onChange={(e) => setMontoMin(e.target.value)}
+            className="w-24 rounded border border-slate-300 px-2 py-1 text-[13px]"
+          />
         </label>
-        <label className="flex flex-col text-xs text-slate-500">
+        <label className="flex flex-col text-[11px] text-slate-500">
           Monto máx.
-          <input type="number" value={montoMax} onChange={(e) => setMontoMax(e.target.value)} className="w-28 rounded border border-slate-300 px-2 py-1.5 text-sm" />
+          <input
+            type="number"
+            value={montoMax}
+            onChange={(e) => setMontoMax(e.target.value)}
+            className="w-24 rounded border border-slate-300 px-2 py-1 text-[13px]"
+          />
         </label>
         <button
           onClick={() => exportToCSV(sorted)}
-          className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+          className="rounded bg-blue-700 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-blue-600"
         >
           Exportar CSV
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded border border-slate-200">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50">
+      <div className="overflow-x-auto rounded border border-slate-300 bg-white">
+        <table className="w-full text-[13px]">
+          <thead className="border-b border-slate-300 bg-slate-100">
             <tr>
               <Th label="Folio" sortable="folio" />
               <Th label="Fecha" sortable="fechaEmision" />
@@ -191,30 +211,30 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
               <Th label="Acciones" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-200">
             {sorted.map((f) => (
-              <tr key={`${f.emisor.rut}-${f.folio}`} className="hover:bg-slate-50">
-                <td className="px-3 py-2 font-medium">{f.folio}</td>
-                <td className="px-3 py-2">{f.fechaEmision}</td>
-                <td className="px-3 py-2">
-                  <div>{f.emisor.nombre}</div>
-                  <div className="text-xs text-slate-400">{formatRUT(f.emisor.rut)}</div>
+              <tr key={`${f.emisor.rut}-${f.folio}`} className="hover:bg-blue-50/40">
+                <td className="px-2.5 py-1.5 font-medium tabular-nums">{f.folio}</td>
+                <td className="px-2.5 py-1.5 tabular-nums">{f.fechaEmision}</td>
+                <td className="px-2.5 py-1.5">
+                  <div className="leading-tight">{f.emisor.nombre}</div>
+                  <div className="text-[11px] text-slate-400">{formatRUT(f.emisor.rut)}</div>
                 </td>
-                <td className="px-3 py-2">
-                  <div>{f.receptor.nombre}</div>
-                  <div className="text-xs text-slate-400">{formatRUT(f.receptor.rut)}</div>
+                <td className="px-2.5 py-1.5">
+                  <div className="leading-tight">{f.receptor.nombre}</div>
+                  <div className="text-[11px] text-slate-400">{formatRUT(f.receptor.rut)}</div>
                 </td>
-                <td className="px-3 py-2">{formatCLP(f.totales.neto)}</td>
-                <td className="px-3 py-2">{formatCLP(f.totales.iva)}</td>
-                <td className="px-3 py-2 font-medium">{formatCLP(f.totales.total)}</td>
-                <td className="px-3 py-2">
-                  <span className={`rounded-full px-2 py-1 text-xs font-medium ${ESTADO_BADGE[f.estado]}`}>
+                <td className="px-2.5 py-1.5 tabular-nums">{formatCLP(f.totales.neto)}</td>
+                <td className="px-2.5 py-1.5 tabular-nums">{formatCLP(f.totales.iva)}</td>
+                <td className="px-2.5 py-1.5 font-medium tabular-nums">{formatCLP(f.totales.total)}</td>
+                <td className="px-2.5 py-1.5">
+                  <span className={`rounded px-1.5 py-0.5 text-[11px] font-medium ${ESTADO_BADGE[f.estado]}`}>
                     {ESTADO_LABEL[f.estado]}
                   </span>
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-2.5 py-1.5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <button onClick={() => onSelect(f)} className="text-blue-600 hover:underline">
+                    <button onClick={() => onSelect(f)} className="text-blue-700 hover:underline">
                       Ver detalle
                     </button>
                     {puedeEnviarMensajes && onContactar && (
