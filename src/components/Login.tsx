@@ -17,43 +17,54 @@ export function Login({ onLogin }: LoginProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-        <h1 className="mb-1 text-lg font-semibold text-gray-900">Facturas Electrónicas SII</h1>
-        <p className="mb-4 text-sm text-gray-500">Ingresa tu nombre y rol para continuar.</p>
-
-        <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Nombre</label>
-        <input
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="mb-4 w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
-          placeholder="Tu nombre"
-          autoFocus
-        />
-
-        <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Rol</label>
-        <div className="mb-4 flex gap-2">
-          {(["admin", "administrativo", "viewer"] as Role[]).map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setRole(r)}
-              className={`flex-1 rounded border px-2 py-2 text-xs font-medium ${
-                role === r ? "border-gray-900 bg-gray-900 text-white" : "border-gray-300 text-gray-600"
-              }`}
-            >
-              {ROLE_LABEL[r]}
-            </button>
-          ))}
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white shadow-lg shadow-indigo-900/40">
+            S
+          </div>
+          <h1 className="text-xl font-bold text-white">Facturas SII</h1>
+          <p className="mt-1 text-sm text-slate-400">Gestión de cobranza y facturación electrónica</p>
         </div>
 
-        <button
-          type="submit"
-          className="w-full rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
-        >
-          Entrar
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-xl">
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Nombre
+          </label>
+          <input
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="mb-5 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-900 transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+            placeholder="Tu nombre"
+            autoFocus
+          />
+
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500">Rol</label>
+          <div className="mb-6 flex gap-2">
+            {(["admin", "administrativo", "viewer"] as Role[]).map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => setRole(r)}
+                className={`flex-1 rounded-lg border px-2 py-2.5 text-xs font-medium transition ${
+                  role === r
+                    ? "border-indigo-600 bg-indigo-600 text-white shadow-sm"
+                    : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                }`}
+              >
+                {ROLE_LABEL[r]}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
+          >
+            Entrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

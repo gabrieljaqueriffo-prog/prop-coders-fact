@@ -52,7 +52,7 @@ export function Configuracion({
             onClick={() =>
               setEditando({ id: crypto.randomUUID(), nombre: "", canal: "email", asunto: "", cuerpo: "" })
             }
-            className="rounded bg-gray-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-gray-700"
+            className="rounded bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500"
           >
             Nueva plantilla
           </button>
@@ -158,7 +158,7 @@ function TemplateForm({
           <button type="button" onClick={onCancelar} className="rounded px-4 py-2 text-sm text-gray-500 hover:text-gray-800">
             Cancelar
           </button>
-          <button type="submit" className="rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+          <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
             Guardar
           </button>
         </div>

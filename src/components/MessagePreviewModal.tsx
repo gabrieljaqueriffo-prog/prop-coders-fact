@@ -69,7 +69,7 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
             }}
             aria-disabled={!destinatario}
             className={`rounded px-4 py-2 text-sm font-medium text-white ${
-              destinatario ? "bg-gray-800 hover:bg-gray-700" : "pointer-events-none bg-gray-300"
+              destinatario ? "bg-indigo-600 hover:bg-indigo-500" : "pointer-events-none bg-gray-300"
             }`}
           >
             {template.canal === "email" ? "Abrir en mi correo" : "Abrir en WhatsApp"}

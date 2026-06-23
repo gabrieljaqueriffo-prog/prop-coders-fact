@@ -45,7 +45,7 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
         {!readOnly && (
           <button
             onClick={() => setSeleccionado({ cliente: VACIO, esNuevo: true })}
-            className="whitespace-nowrap rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+            className="whitespace-nowrap rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
           >
             Nuevo cliente
           </button>

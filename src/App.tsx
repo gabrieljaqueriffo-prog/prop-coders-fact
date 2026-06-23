@@ -100,97 +100,131 @@ function App() {
     setPreviewRapido({ factura, template });
   };
 
-  const NAV_ITEMS: { id: Vista; label: string }[] = [
-    { id: "facturas", label: "Facturas" },
-    { id: "dashboard", label: "Dashboard" },
-    { id: "clientes", label: "Clientes" },
-    { id: "calendario", label: "Calendario" },
-    { id: "configuracion", label: "Configuración" },
+  const NAV_ITEMS: { id: Vista; label: string; icon: string }[] = [
+    { id: "facturas", label: "Facturas", icon: "📄" },
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "clientes", label: "Clientes", icon: "👥" },
+    { id: "calendario", label: "Calendario", icon: "🗓️" },
+    { id: "configuracion", label: "Configuración", icon: "⚙️" },
   ];
 
+  const iniciales = usuario.nombre
+    .split(" ")
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <header className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-gray-900">Facturas Electrónicas SII</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500">
-            {usuario.nombre} · {ROLE_LABEL[usuario.role]}
-          </span>
+    <div className="flex min-h-screen bg-slate-50">
+      <aside className="flex w-60 flex-col border-r border-slate-200 bg-white">
+        <div className="flex items-center gap-2 px-5 py-5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-base font-bold text-white">
+            S
+          </div>
+          <div>
+            <p className="text-sm font-bold leading-tight text-slate-900">Facturas SII</p>
+            <p className="text-xs text-slate-400">Gestión de cobranza</p>
+          </div>
+        </div>
+
+        <nav className="flex-1 space-y-1 px-3">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setVista(item.id)}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                vista === item.id
+                  ? "bg-indigo-50 text-indigo-700"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+              }`}
+            >
+              <span className="text-base">{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="border-t border-slate-200 p-3">
           {facturas.length > 0 && permisos.limpiarFacturas && (
-            <button onClick={handleClear} className="text-sm text-gray-500 hover:text-red-600">
+            <button
+              onClick={handleClear}
+              className="mb-1 w-full rounded-lg px-3 py-2 text-left text-sm text-slate-500 hover:bg-red-50 hover:text-red-600"
+            >
               Limpiar todo
             </button>
           )}
-          <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-gray-800">
-            Salir
-          </button>
+          <div className="flex items-center gap-3 rounded-lg px-3 py-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold text-slate-600">
+              {iniciales}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-slate-900">{usuario.nombre}</p>
+              <p className="text-xs text-slate-400">{ROLE_LABEL[usuario.role]}</p>
+            </div>
+            <button onClick={handleLogout} title="Salir" className="text-slate-400 hover:text-slate-700">
+              ⏻
+            </button>
+          </div>
         </div>
-      </header>
+      </aside>
 
-      {permisos.cargarFacturas && (
-        <div className="mb-6">
-          <FileUpload onLoaded={handleLoaded} />
+      <main className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-7xl px-8 py-8">
+          {permisos.cargarFacturas && (
+            <div className="mb-6">
+              <FileUpload onLoaded={handleLoaded} />
+            </div>
+          )}
+
+          {vista === "facturas" &&
+            (facturas.length > 0 ? (
+              <FacturaTable
+                facturas={facturas}
+                onSelect={setSeleccionada}
+                onContactar={handleContactoRapido}
+                puedeEnviarMensajes={permisos.enviarMensajes}
+              />
+            ) : (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
+                <p className="text-sm text-slate-400">Aún no hay facturas cargadas.</p>
+              </div>
+            ))}
+
+          {vista === "dashboard" && (
+            <Dashboard facturas={facturas} diasAlertaVencimiento={alertConfig.diasAntesVencimiento} />
+          )}
+
+          {vista === "clientes" && (
+            <ClientesView
+              clientes={clientes}
+              onChange={setClientes}
+              readOnly={!permisos.gestionarClientes}
+              facturas={facturas}
+              gestiones={gestiones}
+              onVerFactura={setSeleccionada}
+            />
+          )}
+
+          {vista === "calendario" && (
+            <Calendario facturas={facturas} gestiones={gestiones} onVerFactura={setSeleccionada} />
+          )}
+
+          {vista === "configuracion" &&
+            (!permisos.gestionarConfiguracion ? (
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
+                <p className="text-sm text-slate-400">Solo el administrador puede modificar la configuración.</p>
+              </div>
+            ) : (
+              <Configuracion
+                alertConfig={alertConfig}
+                onAlertConfigChange={setAlertConfig}
+                templates={templates}
+                onTemplatesChange={setTemplates}
+              />
+            ))}
         </div>
-      )}
-
-      <nav className="mb-4 flex gap-4 border-b border-gray-200">
-        {NAV_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setVista(item.id)}
-            className={`border-b-2 px-1 py-2 text-sm font-medium ${
-              vista === item.id ? "border-gray-900 text-gray-900" : "border-transparent text-gray-400"
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
-
-      {vista === "facturas" &&
-        (facturas.length > 0 ? (
-          <FacturaTable
-            facturas={facturas}
-            onSelect={setSeleccionada}
-            onContactar={handleContactoRapido}
-            puedeEnviarMensajes={permisos.enviarMensajes}
-          />
-        ) : (
-          <p className="py-12 text-center text-sm text-gray-400">Aún no hay facturas cargadas.</p>
-        ))}
-
-      {vista === "dashboard" && (
-        <Dashboard facturas={facturas} diasAlertaVencimiento={alertConfig.diasAntesVencimiento} />
-      )}
-
-      {vista === "clientes" && (
-        <ClientesView
-          clientes={clientes}
-          onChange={setClientes}
-          readOnly={!permisos.gestionarClientes}
-          facturas={facturas}
-          gestiones={gestiones}
-          onVerFactura={setSeleccionada}
-        />
-      )}
-
-      {vista === "calendario" && (
-        <Calendario facturas={facturas} gestiones={gestiones} onVerFactura={setSeleccionada} />
-      )}
-
-      {vista === "configuracion" &&
-        (!permisos.gestionarConfiguracion ? (
-          <p className="py-12 text-center text-sm text-gray-400">
-            Solo el administrador puede modificar la configuración.
-          </p>
-        ) : (
-          <Configuracion
-            alertConfig={alertConfig}
-            onAlertConfigChange={setAlertConfig}
-            templates={templates}
-            onTemplatesChange={setTemplates}
-          />
-        ))}
+      </main>
 
       {seleccionada && (
         <FacturaDetalle

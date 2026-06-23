@@ -264,7 +264,7 @@ export function ClienteDetalle({
             <button type="button" onClick={onClose} className="rounded px-4 py-2 text-sm text-gray-500 hover:text-gray-800">
               Cancelar
             </button>
-            <button type="submit" className="rounded bg-gray-800 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700">
+            <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">
               Guardar
             </button>
           </div>
