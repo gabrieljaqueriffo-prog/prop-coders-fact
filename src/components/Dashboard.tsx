@@ -15,16 +15,15 @@ import { formatCLP } from "../utils/formatters";
 
 interface DashboardProps {
   facturas: Factura[];
+  diasAlertaVencimiento: number;
 }
-
-const DIAS_ALERTA_VENCIMIENTO = 7;
 
 function diasHasta(fecha: string): number {
   const ms = new Date(fecha).getTime() - Date.now();
   return Math.ceil(ms / (1000 * 60 * 60 * 24));
 }
 
-export function Dashboard({ facturas }: DashboardProps) {
+export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
   const totalFacturado = useMemo(() => facturas.reduce((sum, f) => sum + f.totales.total, 0), [facturas]);
   const totalIVA = useMemo(() => facturas.reduce((sum, f) => sum + f.totales.iva, 0), [facturas]);
 
@@ -59,9 +58,9 @@ export function Dashboard({ facturas }: DashboardProps) {
     return facturas
       .filter((f) => f.cesion?.vencimiento)
       .map((f) => ({ factura: f, dias: diasHasta(f.cesion!.vencimiento) }))
-      .filter((a) => a.dias < DIAS_ALERTA_VENCIMIENTO)
+      .filter((a) => a.dias < diasAlertaVencimiento)
       .sort((a, b) => a.dias - b.dias);
-  }, [facturas]);
+  }, [facturas, diasAlertaVencimiento]);
 
   return (
     <div className="w-full space-y-6">

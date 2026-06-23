@@ -1,9 +1,21 @@
+import { useState } from "react";
+import type { Cliente, GestionCobro, GestionEstado, LogEntry, MessageTemplate } from "../types";
+import { GESTION_ESTADO_LABEL, facturaId } from "../types";
 import type { Factura } from "../types";
 import { formatCLP, formatRUT } from "../utils/formatters";
+import { buildMailtoLink, buildWhatsappLink } from "../utils/messaging";
 
 interface FacturaDetalleProps {
   factura: Factura;
   onClose: () => void;
+  cliente: Cliente | undefined;
+  gestion: GestionCobro | undefined;
+  templates: MessageTemplate[];
+  logs: LogEntry[];
+  actor: string;
+  readOnly: boolean;
+  onUpdateGestion: (gestion: GestionCobro) => void;
+  onAddLog: (log: LogEntry) => void;
 }
 
 const TIPO_DTE_LABEL: Record<string, string> = {
@@ -20,7 +32,55 @@ function downloadXml(factura: Factura) {
   URL.revokeObjectURL(url);
 }
 
-export function FacturaDetalle({ factura, onClose }: FacturaDetalleProps) {
+export function FacturaDetalle({
+  factura,
+  onClose,
+  cliente,
+  gestion,
+  templates,
+  logs,
+  actor,
+  readOnly,
+  onUpdateGestion,
+  onAddLog,
+}: FacturaDetalleProps) {
+  const [notas, setNotas] = useState(gestion?.notas ?? "");
+  const id = facturaId(factura);
+
+  const handleEstadoChange = (estado: GestionEstado) => {
+    onUpdateGestion({ facturaId: id, estado, notas });
+    onAddLog({
+      id: crypto.randomUUID(),
+      facturaId: id,
+      timestamp: new Date().toISOString(),
+      actor,
+      accion: `Cambió estado de gestión a "${GESTION_ESTADO_LABEL[estado]}"`,
+    });
+  };
+
+  const handleNotasBlur = () => {
+    if (notas === (gestion?.notas ?? "")) return;
+    onUpdateGestion({ facturaId: id, estado: gestion?.estado ?? "sin_contactar", notas });
+    onAddLog({
+      id: crypto.randomUUID(),
+      facturaId: id,
+      timestamp: new Date().toISOString(),
+      actor,
+      accion: "Actualizó notas de gestión",
+    });
+  };
+
+  const handleContacto = (template: MessageTemplate, link: string) => {
+    onAddLog({
+      id: crypto.randomUUID(),
+      facturaId: id,
+      timestamp: new Date().toISOString(),
+      actor,
+      accion: `Envió mensaje "${template.nombre}" por ${template.canal === "email" ? "email" : "WhatsApp"}`,
+    });
+    window.open(link, "_blank");
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
       <div
@@ -125,6 +185,76 @@ export function FacturaDetalle({ factura, onClose }: FacturaDetalleProps) {
             <p className="text-sm text-blue-900">Último vencimiento: {factura.cesion.vencimiento}</p>
           </div>
         )}
+
+        <div className="mb-4 rounded border border-gray-200 p-3">
+          <h3 className="mb-2 text-xs font-semibold uppercase text-gray-500">Gestión de cobro</h3>
+
+          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Estado</label>
+          <select
+            value={gestion?.estado ?? "sin_contactar"}
+            onChange={(e) => handleEstadoChange(e.target.value as GestionEstado)}
+            disabled={readOnly}
+            className="mb-3 w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100"
+          >
+            {Object.entries(GESTION_ESTADO_LABEL).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+
+          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Notas internas</label>
+          <textarea
+            value={notas}
+            onChange={(e) => setNotas(e.target.value)}
+            onBlur={handleNotasBlur}
+            disabled={readOnly}
+            rows={3}
+            className="mb-3 w-full rounded border border-gray-300 px-3 py-2 text-sm disabled:bg-gray-100"
+          />
+
+          {!cliente?.email && !cliente?.whatsapp && (
+            <p className="mb-2 text-xs text-amber-600">
+              Este cliente no tiene email ni WhatsApp registrado. Agrégalo en la sección Clientes.
+            </p>
+          )}
+
+          <div className="mb-3 flex flex-wrap gap-2">
+            {templates.map((t) => (
+              <button
+                key={t.id}
+                onClick={() =>
+                  handleContacto(
+                    t,
+                    t.canal === "email"
+                      ? buildMailtoLink(t, factura, cliente)
+                      : buildWhatsappLink(t, factura, cliente),
+                  )
+                }
+                disabled={t.canal === "email" ? !cliente?.email : !cliente?.whatsapp}
+                className="rounded border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {t.canal === "email" ? "✉️" : "💬"} {t.nombre}
+              </button>
+            ))}
+          </div>
+
+          {logs.length > 0 && (
+            <div>
+              <h4 className="mb-1 text-xs font-semibold uppercase text-gray-500">Historial</h4>
+              <ul className="max-h-32 space-y-1 overflow-y-auto text-xs text-gray-600">
+                {logs
+                  .slice()
+                  .reverse()
+                  .map((log) => (
+                    <li key={log.id}>
+                      {new Date(log.timestamp).toLocaleString("es-CL")} · {log.actor}: {log.accion}
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
         <button
           onClick={() => downloadXml(factura)}
