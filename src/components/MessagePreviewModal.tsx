@@ -26,25 +26,25 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
           <h2 className="text-lg font-semibold">
             Vista previa · {template.canal === "email" ? "Email" : "WhatsApp"}
           </h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
             ✕
           </button>
         </div>
 
-        <p className="mb-3 text-sm text-gray-600">
+        <p className="mb-3 text-sm text-slate-600">
           Para: <span className="font-medium">{destinatario || "(sin dato de contacto)"}</span>
         </p>
 
         {template.canal === "email" && (
           <div className="mb-3">
-            <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Asunto</label>
-            <p className="rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm">{asunto}</p>
+            <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Asunto</label>
+            <p className="rounded border border-slate-200 bg-slate-50 px-3 py-2 text-sm">{asunto}</p>
           </div>
         )}
 
         <div className="mb-4">
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Mensaje</label>
-          <p className="whitespace-pre-wrap rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm">{cuerpo}</p>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Mensaje</label>
+          <p className="whitespace-pre-wrap rounded border border-slate-200 bg-slate-50 px-3 py-2 text-sm">{cuerpo}</p>
         </div>
 
         {!destinatario && (
@@ -55,7 +55,7 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
         )}
 
         <div className="flex justify-end gap-2">
-          <button onClick={onClose} className="rounded px-4 py-2 text-sm text-gray-500 hover:text-gray-800">
+          <button onClick={onClose} className="rounded px-4 py-2 text-sm text-slate-500 hover:text-slate-800">
             Cancelar
           </button>
           <a
@@ -69,7 +69,7 @@ export function MessagePreviewModal({ factura, cliente, template, onClose, onSen
             }}
             aria-disabled={!destinatario}
             className={`rounded px-4 py-2 text-sm font-medium text-white ${
-              destinatario ? "bg-indigo-600 hover:bg-indigo-500" : "pointer-events-none bg-gray-300"
+              destinatario ? "bg-indigo-600 hover:bg-indigo-500" : "pointer-events-none bg-slate-300"
             }`}
           >
             {template.canal === "email" ? "Abrir en mi correo" : "Abrir en WhatsApp"}

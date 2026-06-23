@@ -54,14 +54,14 @@ export function FileUpload({ onLoaded }: FileUploadProps) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 text-center transition-colors ${
-          isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-gray-400"
+        className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed bg-white p-10 text-center shadow-sm transition-colors ${
+          isDragging ? "border-indigo-500 bg-indigo-50" : "border-slate-300 hover:border-indigo-400"
         }`}
       >
-        <p className="text-sm text-gray-600">
-          Arrastra archivos XML aquí o <span className="font-medium text-blue-600">haz click para seleccionar</span>
+        <p className="text-sm text-slate-600">
+          Arrastra archivos XML aquí o <span className="font-medium text-indigo-600">haz click para seleccionar</span>
         </p>
-        <p className="mt-1 text-xs text-gray-400">Soporta múltiples archivos AEC/DTE del SII</p>
+        <p className="mt-1 text-xs text-slate-400">Soporta múltiples archivos AEC/DTE del SII</p>
         <input
           ref={inputRef}
           type="file"

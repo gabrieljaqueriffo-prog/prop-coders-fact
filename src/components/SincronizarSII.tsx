@@ -35,33 +35,33 @@ export function SincronizarSII() {
   };
 
   return (
-    <div className="rounded border border-gray-200 p-4">
-      <h3 className="mb-1 text-sm font-semibold text-gray-900">Sincronizar con SII</h3>
-      <p className="mb-3 text-xs text-gray-500">
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <h3 className="mb-1 text-sm font-semibold text-slate-900">Sincronizar con SII</h3>
+      <p className="mb-3 text-xs text-slate-500">
         Tu Clave Tributaria se envía una sola vez al servidor para esta sincronización y no se guarda en este
         navegador ni en nuestra base de datos. Deberás ingresarla nuevamente la próxima vez que quieras sincronizar.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-3" autoComplete="off">
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">RUT</label>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">RUT</label>
           <input
             value={rut}
             onChange={(e) => setRut(e.target.value)}
             placeholder="76146382-9"
             autoComplete="off"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
             required
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Clave Tributaria</label>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Clave Tributaria</label>
           <input
             type="password"
             value={clave}
             onChange={(e) => setClave(e.target.value)}
             autoComplete="new-password"
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
             required
           />
         </div>
@@ -75,7 +75,7 @@ export function SincronizarSII() {
       </form>
 
       {mensaje && (
-        <p className={`mt-3 text-sm ${estado === "error" ? "text-red-600" : "text-gray-600"}`}>{mensaje}</p>
+        <p className={`mt-3 text-sm ${estado === "error" ? "text-red-600" : "text-slate-600"}`}>{mensaje}</p>
       )}
     </div>
   );

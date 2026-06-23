@@ -122,8 +122,8 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
 
   const Th = ({ label, sortable }: { label: string; sortable?: SortKey }) => (
     <th
-      className={`px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500 ${
-        sortable ? "cursor-pointer select-none hover:text-gray-700" : ""
+      className={`px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500 ${
+        sortable ? "cursor-pointer select-none hover:text-slate-700" : ""
       }`}
       onClick={sortable ? () => toggleSort(sortable) : undefined}
     >
@@ -140,33 +140,33 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
           placeholder="Buscar RUT, razón social, folio, ítem..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="min-w-[240px] flex-1 rounded border border-gray-300 px-3 py-2 text-sm"
+          className="min-w-[240px] flex-1 rounded border border-slate-300 px-3 py-2 text-sm"
         />
         <select
           value={estadoFiltro}
           onChange={(e) => setEstadoFiltro(e.target.value as EstadoFactura | "todos")}
-          className="rounded border border-gray-300 px-3 py-2 text-sm"
+          className="rounded border border-slate-300 px-3 py-2 text-sm"
         >
           <option value="todos">Todos los estados</option>
           <option value="pendiente">Pendiente</option>
           <option value="cedida">Cedida</option>
           <option value="vencida">Vencida</option>
         </select>
-        <label className="flex flex-col text-xs text-gray-500">
+        <label className="flex flex-col text-xs text-slate-500">
           Desde
-          <input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="rounded border border-gray-300 px-2 py-1.5 text-sm" />
+          <input type="date" value={fechaDesde} onChange={(e) => setFechaDesde(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-sm" />
         </label>
-        <label className="flex flex-col text-xs text-gray-500">
+        <label className="flex flex-col text-xs text-slate-500">
           Hasta
-          <input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="rounded border border-gray-300 px-2 py-1.5 text-sm" />
+          <input type="date" value={fechaHasta} onChange={(e) => setFechaHasta(e.target.value)} className="rounded border border-slate-300 px-2 py-1.5 text-sm" />
         </label>
-        <label className="flex flex-col text-xs text-gray-500">
+        <label className="flex flex-col text-xs text-slate-500">
           Monto mín.
-          <input type="number" value={montoMin} onChange={(e) => setMontoMin(e.target.value)} className="w-28 rounded border border-gray-300 px-2 py-1.5 text-sm" />
+          <input type="number" value={montoMin} onChange={(e) => setMontoMin(e.target.value)} className="w-28 rounded border border-slate-300 px-2 py-1.5 text-sm" />
         </label>
-        <label className="flex flex-col text-xs text-gray-500">
+        <label className="flex flex-col text-xs text-slate-500">
           Monto máx.
-          <input type="number" value={montoMax} onChange={(e) => setMontoMax(e.target.value)} className="w-28 rounded border border-gray-300 px-2 py-1.5 text-sm" />
+          <input type="number" value={montoMax} onChange={(e) => setMontoMax(e.target.value)} className="w-28 rounded border border-slate-300 px-2 py-1.5 text-sm" />
         </label>
         <button
           onClick={() => exportToCSV(sorted)}
@@ -176,9 +176,9 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded border border-gray-200">
+      <div className="overflow-x-auto rounded border border-slate-200">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50">
+          <thead className="bg-slate-50">
             <tr>
               <Th label="Folio" sortable="folio" />
               <Th label="Fecha" sortable="fechaEmision" />
@@ -191,18 +191,18 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
               <Th label="Acciones" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-100">
             {sorted.map((f) => (
-              <tr key={`${f.emisor.rut}-${f.folio}`} className="hover:bg-gray-50">
+              <tr key={`${f.emisor.rut}-${f.folio}`} className="hover:bg-slate-50">
                 <td className="px-3 py-2 font-medium">{f.folio}</td>
                 <td className="px-3 py-2">{f.fechaEmision}</td>
                 <td className="px-3 py-2">
                   <div>{f.emisor.nombre}</div>
-                  <div className="text-xs text-gray-400">{formatRUT(f.emisor.rut)}</div>
+                  <div className="text-xs text-slate-400">{formatRUT(f.emisor.rut)}</div>
                 </td>
                 <td className="px-3 py-2">
                   <div>{f.receptor.nombre}</div>
-                  <div className="text-xs text-gray-400">{formatRUT(f.receptor.rut)}</div>
+                  <div className="text-xs text-slate-400">{formatRUT(f.receptor.rut)}</div>
                 </td>
                 <td className="px-3 py-2">{formatCLP(f.totales.neto)}</td>
                 <td className="px-3 py-2">{formatCLP(f.totales.iva)}</td>
@@ -222,14 +222,14 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
                         <button
                           title="Enviar email"
                           onClick={() => onContactar(f, "email")}
-                          className="text-gray-500 hover:text-gray-800"
+                          className="text-slate-500 hover:text-slate-800"
                         >
                           ✉️
                         </button>
                         <button
                           title="Enviar WhatsApp"
                           onClick={() => onContactar(f, "whatsapp")}
-                          className="text-gray-500 hover:text-gray-800"
+                          className="text-slate-500 hover:text-slate-800"
                         >
                           💬
                         </button>
@@ -241,7 +241,7 @@ export function FacturaTable({ facturas, onSelect, onContactar, puedeEnviarMensa
             ))}
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={9} className="px-3 py-8 text-center text-gray-400">
+                <td colSpan={9} className="px-3 py-8 text-center text-slate-400">
                   No hay facturas que coincidan con los filtros.
                 </td>
               </tr>

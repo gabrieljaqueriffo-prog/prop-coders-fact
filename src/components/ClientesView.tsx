@@ -40,7 +40,7 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           placeholder="Buscar por RUT, nombre o email..."
-          className="w-full max-w-sm rounded border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
+          className="w-full max-w-sm rounded border border-slate-300 px-3 py-2 text-sm focus:border-slate-500 focus:outline-none"
         />
         {!readOnly && (
           <button
@@ -52,20 +52,20 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
         )}
       </div>
 
-      <div className="overflow-x-auto rounded border border-gray-200">
+      <div className="overflow-x-auto rounded border border-slate-200">
         <table className="w-full text-sm">
-          <thead className="bg-gray-50">
+          <thead className="bg-slate-50">
             <tr>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500"></th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">RUT</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Nombre</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Email</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">WhatsApp</th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-gray-500">Riesgo</th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500"></th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">RUT</th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Nombre</th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Email</th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">WhatsApp</th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase text-slate-500">Riesgo</th>
               <th className="px-3 py-2"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-slate-100">
             {filtrados.map((c) => {
               const facturasCliente = facturas.filter((f) => f.receptor.rut === c.rut);
               const idsCliente = new Set(facturasCliente.map(facturaId));
@@ -74,22 +74,22 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
               return (
                 <tr
                   key={c.rut}
-                  className="cursor-pointer hover:bg-gray-50"
+                  className="cursor-pointer hover:bg-slate-50"
                   onClick={() => setSeleccionado({ cliente: c, esNuevo: false })}
                 >
                   <td className="px-3 py-2">
-                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50">
+                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded border border-slate-200 bg-slate-50">
                       {c.logo ? (
                         <img src={c.logo} alt="" className="h-full w-full object-cover" />
                       ) : (
-                        <span className="text-[10px] text-gray-400">—</span>
+                        <span className="text-[10px] text-slate-400">—</span>
                       )}
                     </div>
                   </td>
                   <td className="px-3 py-2">{c.rut}</td>
                   <td className="px-3 py-2 font-medium">{c.nombre}</td>
-                  <td className="px-3 py-2 text-gray-600">{c.email}</td>
-                  <td className="px-3 py-2 text-gray-600">{c.whatsapp}</td>
+                  <td className="px-3 py-2 text-slate-600">{c.email}</td>
+                  <td className="px-3 py-2 text-slate-600">{c.whatsapp}</td>
                   <td className="px-3 py-2">
                     <span className={`rounded-full px-2 py-1 text-xs font-medium ${RIESGO_BADGE[riesgo.nivel]}`}>
                       {RIESGO_LABEL[riesgo.nivel]}
@@ -107,7 +107,7 @@ export function ClientesView({ clientes, onChange, readOnly, facturas, gestiones
             })}
             {filtrados.length === 0 && (
               <tr>
-                <td colSpan={7} className="px-3 py-6 text-center text-gray-400">
+                <td colSpan={7} className="px-3 py-6 text-center text-slate-400">
                   No hay clientes.
                 </td>
               </tr>

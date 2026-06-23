@@ -82,7 +82,7 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
       <div className="flex items-center justify-between">
         <button
           onClick={() => setCursor(new Date(anio, mes - 1, 1))}
-          className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50"
+          className="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50"
         >
           ← Anterior
         </button>
@@ -91,7 +91,7 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
         </h2>
         <button
           onClick={() => setCursor(new Date(anio, mes + 1, 1))}
-          className="rounded border border-gray-300 px-3 py-1 text-sm hover:bg-gray-50"
+          className="rounded border border-slate-300 px-3 py-1 text-sm hover:bg-slate-50"
         >
           Siguiente →
         </button>
@@ -105,7 +105,7 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold uppercase text-gray-500">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold uppercase text-slate-500">
         {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map((d) => (
           <div key={d}>{d}</div>
         ))}
@@ -121,10 +121,10 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
               key={fecha}
               onClick={() => setDiaSeleccionado(fecha)}
               className={`min-h-20 rounded border p-1 text-left align-top ${
-                esHoy ? "border-gray-800" : "border-gray-200"
-              } hover:bg-gray-50`}
+                esHoy ? "border-slate-800" : "border-slate-200"
+              } hover:bg-slate-50`}
             >
-              <p className={`mb-1 text-xs ${esHoy ? "font-bold text-gray-900" : "text-gray-500"}`}>
+              <p className={`mb-1 text-xs ${esHoy ? "font-bold text-slate-900" : "text-slate-500"}`}>
                 {Number(fecha.slice(-2))}
               </p>
               <div className="flex flex-wrap gap-0.5">
@@ -143,24 +143,24 @@ export function Calendario({ facturas, gestiones, onVerFactura }: CalendarioProp
             className="max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-lg bg-white p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-4 flex items-center justify-between border-b border-gray-200 pb-3">
+            <div className="mb-4 flex items-center justify-between border-b border-slate-200 pb-3">
               <h3 className="text-lg font-semibold">{diaSeleccionado}</h3>
-              <button onClick={() => setDiaSeleccionado(null)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setDiaSeleccionado(null)} className="text-slate-400 hover:text-slate-600">
                 ✕
               </button>
             </div>
             {eventosDelDiaSeleccionado.length === 0 ? (
-              <p className="text-sm text-gray-400">Sin eventos este día.</p>
+              <p className="text-sm text-slate-400">Sin eventos este día.</p>
             ) : (
               <ul className="space-y-2">
                 {eventosDelDiaSeleccionado.map((ev, i) => (
-                  <li key={i} className="flex items-center justify-between rounded border border-gray-200 p-2 text-sm">
+                  <li key={i} className="flex items-center justify-between rounded border border-slate-200 p-2 text-sm">
                     <div>
                       <span className={`mr-2 rounded-full px-2 py-1 text-xs font-medium ${TIPO_COLOR[ev.tipo]}`}>
                         {TIPO_LABEL[ev.tipo]}
                       </span>
                       <span className="font-medium">{ev.factura.receptor.nombre}</span>
-                      <span className="ml-1 text-gray-500">
+                      <span className="ml-1 text-slate-500">
                         · Folio {ev.factura.folio} · {formatCLP(ev.factura.totales.total)}
                       </span>
                     </div>

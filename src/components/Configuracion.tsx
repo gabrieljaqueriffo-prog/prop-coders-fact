@@ -29,9 +29,9 @@ export function Configuracion({
     <div className="space-y-6">
       <SincronizarSII />
 
-      <div className="rounded border border-gray-200 p-4">
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">Alertas de vencimiento</h3>
-        <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h3 className="mb-2 text-sm font-semibold text-slate-700">Alertas de vencimiento</h3>
+        <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">
           Días antes del vencimiento para alertar
         </label>
         <input
@@ -41,13 +41,13 @@ export function Configuracion({
           onChange={(e) =>
             onAlertConfigChange({ ...alertConfig, diasAntesVencimiento: Number(e.target.value) || 1 })
           }
-          className="w-32 rounded border border-gray-300 px-3 py-2 text-sm"
+          className="w-32 rounded border border-slate-300 px-3 py-2 text-sm"
         />
       </div>
 
-      <div className="rounded border border-gray-200 p-4">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-700">Plantillas de mensaje</h3>
+          <h3 className="text-sm font-semibold text-slate-700">Plantillas de mensaje</h3>
           <button
             onClick={() =>
               setEditando({ id: crypto.randomUUID(), nombre: "", canal: "email", asunto: "", cuerpo: "" })
@@ -57,15 +57,15 @@ export function Configuracion({
             Nueva plantilla
           </button>
         </div>
-        <ul className="divide-y divide-gray-100">
+        <ul className="divide-y divide-slate-100">
           {templates.map((t) => (
             <li key={t.id} className="flex items-center justify-between py-2 text-sm">
               <div>
                 <p className="font-medium">{t.nombre}</p>
-                <p className="text-xs text-gray-500">{t.canal === "email" ? "Email" : "WhatsApp"}</p>
+                <p className="text-xs text-slate-500">{t.canal === "email" ? "Email" : "WhatsApp"}</p>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => setEditando(t)} className="text-gray-500 hover:text-gray-800">
+                <button onClick={() => setEditando(t)} className="text-slate-500 hover:text-slate-800">
                   Editar
                 </button>
                 <button
@@ -78,7 +78,7 @@ export function Configuracion({
             </li>
           ))}
         </ul>
-        <p className="mt-2 text-xs text-gray-400">
+        <p className="mt-2 text-xs text-slate-400">
           Variables disponibles: {"{{cliente}}"}, {"{{folio}}"}, {"{{monto}}"}, {"{{vencimiento}}"}
         </p>
       </div>
@@ -115,20 +115,20 @@ function TemplateForm({
         <h2 className="mb-2 text-lg font-semibold">Plantilla de mensaje</h2>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Nombre</label>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Nombre</label>
           <input
             value={form.nombre}
             onChange={(e) => setForm({ ...form, nombre: e.target.value })}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
             required
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Canal</label>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Canal</label>
           <select
             value={form.canal}
             onChange={(e) => setForm({ ...form, canal: e.target.value as "email" | "whatsapp" })}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
           >
             <option value="email">Email</option>
             <option value="whatsapp">WhatsApp</option>
@@ -136,26 +136,26 @@ function TemplateForm({
         </div>
         {form.canal === "email" && (
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Asunto</label>
+            <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Asunto</label>
             <input
               value={form.asunto}
               onChange={(e) => setForm({ ...form, asunto: e.target.value })}
-              className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+              className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
             />
           </div>
         )}
         <div>
-          <label className="mb-1 block text-xs font-semibold uppercase text-gray-500">Cuerpo</label>
+          <label className="mb-1 block text-xs font-semibold uppercase text-slate-500">Cuerpo</label>
           <textarea
             value={form.cuerpo}
             onChange={(e) => setForm({ ...form, cuerpo: e.target.value })}
             rows={5}
-            className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded border border-slate-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onCancelar} className="rounded px-4 py-2 text-sm text-gray-500 hover:text-gray-800">
+          <button type="button" onClick={onCancelar} className="rounded px-4 py-2 text-sm text-slate-500 hover:text-slate-800">
             Cancelar
           </button>
           <button type="submit" className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500">

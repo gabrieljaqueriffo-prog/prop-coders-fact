@@ -65,29 +65,30 @@ export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
   return (
     <div className="w-full space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded border border-gray-200 p-4">
-          <p className="text-xs uppercase text-gray-500">Total facturado</p>
-          <p className="mt-1 text-2xl font-semibold">{formatCLP(totalFacturado)}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Total facturado</p>
+          <p className="mt-2 text-2xl font-bold text-slate-900">{formatCLP(totalFacturado)}</p>
         </div>
-        <div className="rounded border border-gray-200 p-4">
-          <p className="text-xs uppercase text-gray-500">IVA acumulado</p>
-          <p className="mt-1 text-2xl font-semibold">{formatCLP(totalIVA)}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">IVA acumulado</p>
+          <p className="mt-2 text-2xl font-bold text-slate-900">{formatCLP(totalIVA)}</p>
         </div>
-        <div className="rounded border border-gray-200 p-4">
-          <p className="text-xs uppercase text-gray-500">Facturas cargadas</p>
-          <p className="mt-1 text-2xl font-semibold">{facturas.length}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Facturas cargadas</p>
+          <p className="mt-2 text-2xl font-bold text-slate-900">{facturas.length}</p>
         </div>
-        <div className="rounded border border-gray-200 p-4">
-          <p className="text-xs uppercase text-gray-500">Por estado</p>
-          <p className="mt-1 text-sm">
-            Pendientes: {conteoPorEstado.pendiente} · Cedidas: {conteoPorEstado.cedida} · Vencidas:{" "}
-            {conteoPorEstado.vencida}
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Por estado</p>
+          <p className="mt-2 text-sm text-slate-600">
+            <span className="font-semibold text-slate-900">{conteoPorEstado.pendiente}</span> pendientes ·{" "}
+            <span className="font-semibold text-slate-900">{conteoPorEstado.cedida}</span> cedidas ·{" "}
+            <span className="font-semibold text-slate-900">{conteoPorEstado.vencida}</span> vencidas
           </p>
         </div>
       </div>
 
       {alertas.length > 0 && (
-        <div className="rounded border border-amber-300 bg-amber-50 p-4">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
           <h3 className="mb-2 text-sm font-semibold text-amber-800">
             Alertas de vencimiento ({alertas.length})
           </h3>
@@ -103,28 +104,28 @@ export function Dashboard({ facturas, diasAlertaVencimiento }: DashboardProps) {
       )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded border border-gray-200 p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">Top 5 receptores por monto</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="mb-3 text-sm font-semibold text-slate-700">Top 5 receptores por monto</h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={topReceptores} layout="vertical" margin={{ left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" tickFormatter={(v) => formatCLP(v)} />
-              <YAxis type="category" dataKey="nombre" width={150} tick={{ fontSize: 11 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis type="number" tickFormatter={(v) => formatCLP(v)} tick={{ fontSize: 11, fill: "#64748b" }} />
+              <YAxis type="category" dataKey="nombre" width={150} tick={{ fontSize: 11, fill: "#64748b" }} />
               <Tooltip formatter={(v) => formatCLP(Number(v))} />
-              <Bar dataKey="total" fill="#1f2937" />
+              <Bar dataKey="total" fill="#4f46e5" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="rounded border border-gray-200 p-4">
-          <h3 className="mb-3 text-sm font-semibold text-gray-700">Facturación por fecha de emisión</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <h3 className="mb-3 text-sm font-semibold text-slate-700">Facturación por fecha de emisión</h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={lineaTiempo}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="fecha" tick={{ fontSize: 11 }} />
-              <YAxis tickFormatter={(v) => formatCLP(v)} width={90} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="fecha" tick={{ fontSize: 11, fill: "#64748b" }} />
+              <YAxis tickFormatter={(v) => formatCLP(v)} width={90} tick={{ fontSize: 11, fill: "#64748b" }} />
               <Tooltip formatter={(v) => formatCLP(Number(v))} />
-              <Line type="monotone" dataKey="total" stroke="#1f2937" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="total" stroke="#4f46e5" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
